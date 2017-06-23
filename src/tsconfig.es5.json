@@ -21,8 +21,8 @@
     "annotateForClosureCompiler": true,
     "strictMetadataEmit": true,
     "skipTemplateCodegen": true,
-    "flatModuleOutFile": "ng-ankor-autofocus.js",
-    "flatModuleId": "ng-ankor-autofocus"
+    "flatModuleOutFile": "angular-autofocus-fix.js",
+    "flatModuleId": "angular-autofocus-fix"
   },
   "files": [
     "./index.ts"

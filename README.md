@@ -1,4 +1,4 @@
-# ng-ankor-autofocus
+# angular-autofocus-fix
 
 Angular 2+ directive for fix autofocus on dinamically created controls (`*ngIf`, `*ngFor`, etc.).
 
@@ -12,7 +12,7 @@ Works with native DOM. Doesn't use any dependencies(jQuery, etc.).
 To install this library, run:
 
 ```bash
-$ npm install ng-ankor-autofocus --save
+$ npm install angular-autofocus-fix --save
 ```
 
 ## Quick start
@@ -25,7 +25,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 
-import { AutofocusModule } from 'ng-ankor-autofocus'; // <--- new code
+import { AutofocusModule } from 'angular-autofocus-fix'; // <--- new code
 
 @NgModule({
   declarations: [

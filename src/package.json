@@ -1,10 +1,10 @@
 {
-  "name": "angular-autofocus",
+  "name": "angular-autofocus-fix",
   "description": "Angular 2+ directive for fix autofocus on dinamically created controls (*ngIf, *ngFor, etc.). Uses native 'autofocus' selector, no need to change your html template. Doesn't use any dependencies.",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "git@github.com:ancor-dev/ng-ankor-autofocus.git"
+    "url": "git@github.com:ancor-dev/angular-autofocus-fix.git"
   },
   "author": {
     "name": "Anton Korniychuk",
@@ -28,10 +28,10 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "git@github.com:ancor-dev/ng-ankor-autofocus.git/issues"
+    "url": "git@github.com:ancor-dev/angular-autofocus-fix.git/issues"
   },
-  "module": "ng-ankor-autofocus.js",
-  "typings": "ng-ankor-autofocus.d.ts",
+  "module": "angular-autofocus-fix.js",
+  "typings": "angular-autofocus-fix.d.ts",
   "peerDependencies": {
     "@angular/core": "^4.0.0",
     "rxjs": "^5.1.0",
