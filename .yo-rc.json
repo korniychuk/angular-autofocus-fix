@@ -1,0 +1,7 @@
+{
+  "generator-angular2-library": {
+    "promptValues": {
+      "gitRepositoryUrl": "git@github.com:ancor-dev/ng-ankor-autofocus.git"
+    }
+  }
+}
