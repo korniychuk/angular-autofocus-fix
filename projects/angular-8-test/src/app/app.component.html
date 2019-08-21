@@ -1,0 +1,11 @@
+<div style="text-align:center">
+  <h1>Welcome to {{ title }}!</h1>
+</div>
+
+<div class="inputs">
+  <input type="text"
+         autofocus
+         *ngFor="let v of numbers$ | async" [value]="v"
+         [id]="'input-' + v"
+  >
+</div>

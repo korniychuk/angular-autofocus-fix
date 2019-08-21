@@ -1,19 +1,19 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AutofocusDirective } from './autofocus.directive';
+import { NgxAutofocusFixDirective } from '../../projects/ngx-autofocus-fix/src/lib/autofocus.directive';
 
-export * from './autofocus.directive';
+export * from '../../projects/ngx-autofocus-fix/src/lib/autofocus.directive';
 
 @NgModule({
   imports: [
     CommonModule,
   ],
   declarations: [
-    AutofocusDirective,
+    NgxAutofocusFixDirective,
   ],
   exports: [
-    AutofocusDirective,
+    NgxAutofocusFixDirective,
   ],
 })
 export class AutofocusModule {

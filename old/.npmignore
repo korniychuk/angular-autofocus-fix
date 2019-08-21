@@ -9,7 +9,7 @@ docs/*
 # *.d.ts
 
 # JetBrains
-.idea
+../.idea
 .project
 .settings
 .idea/*
