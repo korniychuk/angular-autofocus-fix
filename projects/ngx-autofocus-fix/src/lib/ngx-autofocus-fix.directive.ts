@@ -78,7 +78,6 @@ export class NgxAutofocusFixDirective implements OnChanges, AfterViewInit {
   private checkFocus(): void {
     if (!this.control) { return; }
 
-    console.log('hasFocus', this.hasAutofocus);
     if (this.hasAutofocus) {
       this.control.focus();
       // this.cdr.detectChanges();
