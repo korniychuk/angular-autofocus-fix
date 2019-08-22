@@ -9,10 +9,8 @@ import { NgxAutofocusFixDirective } from './ngx-autofocus-fix.directive';
   selector: 'no-focusable',
   template: ``
 })
-
 export class NoFocusableComponent implements OnInit {
-  constructor(private $element: ElementRef) {
-  }
+  constructor(private $element: ElementRef) {}
 
   ngOnInit() {
     (this.$element.nativeElement as HTMLElement).focus = undefined as any;
