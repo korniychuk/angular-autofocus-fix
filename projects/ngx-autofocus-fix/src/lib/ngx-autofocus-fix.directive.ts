@@ -48,12 +48,15 @@ export class NgxAutofocusFixDirective implements OnChanges, AfterViewInit {
   @Input()
   public autofocusFixSmartEmptyCheck = false;
 
+  @Input()
+  public autofocusFixTriggerDetectChanges = false;
+
   private hasAutofocus = false;
   private control?: HTMLElement;
 
   public constructor(
     private readonly el: ElementRef,
-    // private readonly cdr: ChangeDetectorRef,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   public ngOnChanges(changes: { [key in keyof NgxAutofocusFixDirective]?: SimpleChange }) {
@@ -87,7 +90,7 @@ export class NgxAutofocusFixDirective implements OnChanges, AfterViewInit {
 
     if (this.hasAutofocus) {
       this.control.focus();
-      // this.cdr.detectChanges();
+      // if (this.autofocusFixTriggerDetectChanges) { this.cdr.detectChanges(); }
     } else {
       // @todo: blur
       // this.control
