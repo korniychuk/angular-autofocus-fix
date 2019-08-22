@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { interval } from 'rxjs/internal/observable/interval';
-import { scan, take } from 'rxjs/operators';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable, Subject, interval } from 'rxjs';
+import { scan, switchMap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -10,14 +9,21 @@ import { Observable } from 'rxjs/internal/Observable';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public title = 'angular-8-test';
+  public title = 'angular-*-test';
   public numbers$!: Observable<number[]>;
 
+  private run$ = new Subject<void>();
+
   public ngOnInit() {
-    this.numbers$ = interval(250).pipe(
-      take(3),
-      scan((acc: number[], i: number) => [...acc, i], []),
+    this.numbers$ = this.run$.pipe(
+      switchMap(() => interval(100)),
+      take(5),
+      scan((acc: number[], i: number) => (acc.push(i), acc), []),
     );
+  }
+
+  public run(): void {
+    this.run$.next();
   }
 
 }

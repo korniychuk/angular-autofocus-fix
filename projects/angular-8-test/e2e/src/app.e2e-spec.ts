@@ -1,9 +1,9 @@
 import { AppPage } from './app.po';
-import { browser, logging } from 'protractor';
-import { take, tap } from 'rxjs/operators';
-import { timer } from 'rxjs/internal/observable/timer';
+import { browser, logging, protractor } from 'protractor';
 
-describe('Angular 8', () => {
+const expectedAngularMajorVersion = 8;
+
+describe(`Angular ${expectedAngularMajorVersion}`, () => {
   let page: AppPage;
 
   beforeEach(() => {
@@ -14,19 +14,39 @@ describe('Angular 8', () => {
     describe('WHEN: Page opened', () => {
       it('THEN: should display welcome message', () => {
         page.navigateTo();
-        expect(page.getTitleText()).toEqual('Welcome to angular-8-test!');
+        expect(page.getTitleText()).toEqual('Welcome to angular-*-test!');
       });
+    });
+    it(`Angular version should be ${expectedAngularMajorVersion}.*.*`, () => {
+      expect(page.getAngularVersion()).toMatch(new RegExp(`^${expectedAngularMajorVersion}\\.\\d+\.\\d+$`));
     });
   });
 
   describe('SCENARIO: Autofocusing', () => {
+
+    beforeAll( () => {
+      browser.waitForAngularEnabled(false);
+    });
+
+    afterAll(() => {
+      browser.waitForAngularEnabled(true);
+    });
+
     it('Should move focus to the each newly create input', async () => {
-      await timer(100, 250).pipe(
-        take(3),
-        tap((i) => {
-          expect(page.getIdOfFocusedElement()).toBe('input-' + i);
-        }),
-      ).toPromise();
+      page.getRunButton().click();
+      expect(page.getInputsCount()).toBe(0);
+
+      await browser.sleep(25);
+      expect(page.getInputsCount()).toBe(0);
+
+      const until = protractor.ExpectedConditions;
+      for (let i = 0; i < 5; i++) {
+        await browser.wait(until.presenceOf(page.getElementByE2eAttr('input-' + i)), 150, 'Element taking too long to appear in the DOM');
+
+        expect(page.getInputsCount()).toBe(i + 1);
+        const focusIndex = i - i % 2;
+        expect(page.getE2eAttrOfFocusedElement()).toBe('input-' + focusIndex);
+      }
     });
   });
 
