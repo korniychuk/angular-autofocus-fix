@@ -1,9 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { NgxAutofocusFixDirective } from './ngx-autofocus-fix.directive';
+
+@Component({
+  selector: 'no-focusable',
+  template: ``
+})
+
+export class NoFocusableComponent implements OnInit {
+  constructor(private $element: ElementRef) {
+  }
+
+  ngOnInit() {
+    (this.$element.nativeElement as HTMLElement).focus = undefined as any;
+  }
+}
 
 @Component({
   selector: 'wrapper',
@@ -20,10 +34,13 @@ import { NgxAutofocusFixDirective } from './ngx-autofocus-fix.directive';
     <div *ngIf="show[3]">
       <input class="input-3" type="text" autofocus [autofocusFixSmartEmptyCheck]="smartEmptyCheck">
     </div>
+    <div *ngIf="showNoFocusable">
+      <no-focusable autofocus></no-focusable>
+    </div>
   `,
 })
-
 export class TestWrapperComponent {
+  public showNoFocusable = false;
   public show: boolean[] = Array(4).fill(false);
   public autofocusValue: any = true;
   public smartEmptyCheck = false;
@@ -47,7 +64,7 @@ describe('NgxAutofocusFixDirective', () => {
     await TestBed
       .configureTestingModule({
         imports: [CommonModule],
-        declarations: [TestWrapperComponent, NgxAutofocusFixDirective],
+        declarations: [TestWrapperComponent, NoFocusableComponent, NgxAutofocusFixDirective],
       })
       .compileComponents();
 
@@ -89,8 +106,27 @@ describe('NgxAutofocusFixDirective', () => {
         });
       });
     }
-
   }); // end :: SCENARIO: Testing TestWrapperComponent
+
+  describe('SCENARIO: Edge cases', () => {
+    describe('GIVEN: No .focus() method on the HTMLElement', () => {
+      describe('WHEN: Initialize autofocus', () => {
+        it('THEN: Print console warning', () => {
+          // arrange
+          spyOn(console, 'warn');
+
+          // act
+          comp.showNoFocusable = true;
+          fixture.detectChanges();
+
+          // assert
+          const noFocusable = fixture.debugElement.query(By.directive(NoFocusableComponent));
+          expect(noFocusable).toBeTruthy();
+          expect(console.warn).toHaveBeenCalled();
+        });
+      });
+    });
+  });
 
   describe('SCENARIO: Input autofocus on creation', () => {
 
