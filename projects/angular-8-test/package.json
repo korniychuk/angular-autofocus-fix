@@ -7,6 +7,18 @@
     "url": "https://github.com/korniychuk/angular-autofocus-fix"
   },
   "dependencies": {
+    "@angular/cdk": "^8.1.3",
+    "@angular/material": "^8.1.3",
+    "@angular/animations": "^8.0.0",
+    "@angular/common": "^8.0.0",
+    "@angular/compiler": "^8.0.0",
+    "@angular/core": "^8.0.0",
+    "@angular/forms": "^8.0.0",
+    "@angular/platform-browser": "^8.0.0",
+    "@angular/platform-browser-dynamic": "^8.0.0",
+    "@angular/router": "^8.0.0",
+    "rxjs": "~6.4.0",
+    "zone.js": "~0.9.1",
     "ngx-autofocus-fix": "file:../../dist/ngx-autofocus-fix"
   }
 }

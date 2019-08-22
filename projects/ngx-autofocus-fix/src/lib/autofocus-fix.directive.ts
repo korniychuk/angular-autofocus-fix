@@ -1,4 +1,13 @@
-import { Directive, ElementRef, Input, AfterViewInit, OnChanges, SimpleChange, ChangeDetectorRef } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  Input,
+  AfterViewInit,
+  OnChanges,
+  SimpleChange,
+  ChangeDetectorRef,
+  Injector,
+} from '@angular/core';
 import { normalizeBoolean } from './utils';
 
 /**
@@ -39,27 +48,28 @@ import { normalizeBoolean } from './utils';
 @Directive({
   selector: '[autofocus]',
 })
-export class NgxAutofocusFixDirective implements OnChanges, AfterViewInit {
+export class AutofocusFixDirective implements OnChanges, AfterViewInit {
 
   @Input()
   /** Raw value. Always have default value: '' */
   public autofocus: any;
 
   @Input()
-  public autofocusFixSmartEmptyCheck = false;
+  public autofocusFixSmartEmptyCheck?: boolean;
 
   @Input()
-  public autofocusFixTriggerDetectChanges = false;
+  public autofocusFixTriggerDetectChanges?: boolean;
 
   private hasAutofocus = false;
   private control?: HTMLElement;
 
   public constructor(
-    private readonly el: ElementRef,
-    private readonly cdr: ChangeDetectorRef,
+    private readonly $er: ElementRef,
+    private readonly $cdr: ChangeDetectorRef,
+    private readonly $injector: Injector,
   ) {}
 
-  public ngOnChanges(changes: { [key in keyof NgxAutofocusFixDirective]?: SimpleChange }) {
+  public ngOnChanges(changes: { [key in keyof AutofocusFixDirective]?: SimpleChange }) {
     let needCheckFocus = false;
 
     if (changes.autofocus || changes.autofocusFixSmartEmptyCheck) {
@@ -73,16 +83,19 @@ export class NgxAutofocusFixDirective implements OnChanges, AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    const el: HTMLElement = this.el.nativeElement;
+    const el: HTMLElement = this.$er.nativeElement;
     if (el.focus) {
       this.control = el;
       this.checkFocus();
     } else {
       console.warn(
-        'NgxAutofocusFixDirective: There is no .focus() method on the element: %O. Directive initialized',
+        'AutofocusFixDirective: There is no .focus() method on the element: %O. Directive initialized',
         el,
       );
     }
+    // console.log('!!!', this.el, this.cdr, this.$injector.);
+    const providers = (this.$injector as any).elDef.element.publicProviders;
+    console.log('!!!', providers);
   }
 
   private checkFocus(): void {
@@ -90,7 +103,8 @@ export class NgxAutofocusFixDirective implements OnChanges, AfterViewInit {
 
     if (this.hasAutofocus) {
       this.control.focus();
-      // if (this.autofocusFixTriggerDetectChanges) { this.cdr.detectChanges(); }
+      // if (this.autofocusFixTriggerDetectChanges) { this.$cdr.detectChanges(); }
+      this.$cdr.checkNoChanges();
     } else {
       // @todo: blur
       // this.control

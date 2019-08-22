@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { NgxAutofocusFixDirective } from './ngx-autofocus-fix.directive';
+import { AutofocusFixDirective } from './autofocus-fix.directive';
 
 @Component({
   selector: 'no-focusable',
@@ -44,7 +44,7 @@ export class TestWrapperComponent {
   public smartEmptyCheck = false;
 }
 
-describe('NgxAutofocusFixDirective', () => {
+describe('AutofocusFixDirective', () => {
   let comp: TestWrapperComponent;
   let fixture: ComponentFixture<TestWrapperComponent>;
 
@@ -62,7 +62,7 @@ describe('NgxAutofocusFixDirective', () => {
     await TestBed
       .configureTestingModule({
         imports: [CommonModule],
-        declarations: [TestWrapperComponent, NoFocusableComponent, NgxAutofocusFixDirective],
+        declarations: [TestWrapperComponent, NoFocusableComponent, AutofocusFixDirective],
       })
       .compileComponents();
 

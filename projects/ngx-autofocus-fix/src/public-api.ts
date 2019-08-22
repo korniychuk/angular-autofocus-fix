@@ -2,4 +2,6 @@
  * Public API Surface of ngx-autofocus-fix
  */
 
-export * from './lib/ngx-autofocus-fix.module';
+export { AutofocusFixModule } from './lib/autofocus-fix.module';
+export { provideAutofocusFixConfig, AutofocusFixConfig } from './lib/autofocus-fix-config';
+

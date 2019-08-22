@@ -53,6 +53,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/angular-8-test",
+            "preserveSymlinks": true,
             "index": "projects/angular-8-test/src/index.html",
             "main": "projects/angular-8-test/src/main.ts",
             "polyfills": "projects/angular-8-test/src/polyfills.ts",

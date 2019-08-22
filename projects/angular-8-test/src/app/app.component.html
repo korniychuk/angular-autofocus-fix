@@ -1,6 +1,7 @@
 <div style="text-align:center">
   <h1>Welcome to {{ title }}!</h1>
 </div>
+<hr>
 <button e2e-attr="run" (click)="run()">Run</button>
 <div class="inputs">
   <input type="text"
@@ -10,3 +11,5 @@
          [attr.e2e-attr]="'input-' + i"
   >
 </div>
+<hr>
+<app-material-test></app-material-test>
