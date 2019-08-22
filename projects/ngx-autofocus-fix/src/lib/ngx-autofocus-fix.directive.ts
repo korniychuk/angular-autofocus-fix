@@ -2,7 +2,7 @@ import { Directive, ElementRef, Input, AfterViewInit, OnChanges, SimpleChange, C
 import { normalizeBoolean } from './utils';
 
 /**
- * # Ways to turn off autofocus: any js-falsely value, except empty string
+ * ## Ways to turn off autofocus: any js-falsely value, except empty string
  *
  *     <!-- with data binding -->
  *     <input [autofocus]=""> <!-- undefined value -->
@@ -10,19 +10,19 @@ import { normalizeBoolean } from './utils';
  *     <input [autofocus]="false">
  *     <input [autofocus]="null">
  *     <input [autofocus]="0">
- *     <input [autofocus]="NaN"> <!-- binding only case -->
+ *     <input [autofocus]="NaN">
  *
  *     <!-- without data binding -->
  *     <input autofocus="undefined">
  *     <input autofocus="false">
  *     <input autofocus="null">
  *     <input autofocus="0">
+ *     <input autofocus="NaN">
  *
  *     <input> <!-- disabled by default -->
  *
  *
- * # Ways to enable autofocus: any js-true value and empty string
- *
+ * ## Ways to enable autofocus: any js-true value and empty string
  *
  *     <!-- empty string will enable autofocus, this is default html behavior -->
  *     <input [autofocus]="''">
@@ -34,7 +34,6 @@ import { normalizeBoolean } from './utils';
  *
  *     <input [autofocus]="'any other values'">
  *
- * @todo: smartEmptyCheck
  * @todo: async
  */
 @Directive({
@@ -43,10 +42,11 @@ import { normalizeBoolean } from './utils';
 export class NgxAutofocusFixDirective implements OnChanges, AfterViewInit {
 
   @Input()
-  public set autofocus(value: any) {
-    this.hasAutofocus = normalizeBoolean(value);
-    this.checkFocus();
-  }
+  /** Raw value. Always have default value: '' */
+  public autofocus: any;
+
+  @Input()
+  public autofocusFixSmartEmptyCheck = false;
 
   private hasAutofocus = false;
   private control?: HTMLElement;
@@ -57,12 +57,19 @@ export class NgxAutofocusFixDirective implements OnChanges, AfterViewInit {
   ) {}
 
   public ngOnChanges(changes: { [key in keyof NgxAutofocusFixDirective]?: SimpleChange }) {
-    if (changes.autofocus && changes.autofocus.currentValue !== changes.autofocus.previousValue) {
+    let needCheckFocus = false;
+
+    if (changes.autofocus || changes.autofocusFixSmartEmptyCheck) {
+      this.hasAutofocus = normalizeBoolean(this.autofocus, this.autofocusFixSmartEmptyCheck);
+      needCheckFocus = true;
+    }
+
+    if (needCheckFocus) {
       this.checkFocus();
     }
   }
 
-  public ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     const el: HTMLElement = this.el.nativeElement;
     if (el.focus) {
       this.control = el;
