@@ -1,11 +1,17 @@
 import { browser, by, element } from 'protractor';
+import { AppComponent } from '../../src/app/app.component';
 
 export class AppPage {
-  navigateTo() {
-    return browser.get(browser.baseUrl) as Promise<any>;
+  public navigateTo() {
+    return browser.get(browser.baseUrl);
   }
 
-  getTitleText() {
-    return element(by.css('app-root h1')).getText() as Promise<string>;
+  public getTitleText() {
+    return element(by.css('app-root h1')).getText();
   }
+
+  public getIdOfFocusedElement() {
+    return element(by.css(':focus')).getAttribute('id') as Promise<string>;
+  }
+
 }

@@ -11,11 +11,11 @@ import { Observable } from 'rxjs/internal/Observable';
 })
 export class AppComponent implements OnInit {
   public title = 'angular-8-test';
-  public numbers$: Observable<number[]>;
+  public numbers$!: Observable<number[]>;
 
   public ngOnInit() {
-    this.numbers$ = interval(1000).pipe(
-      take(5),
+    this.numbers$ = interval(250).pipe(
+      take(3),
       scan((acc: number[], i: number) => [...acc, i], []),
     );
   }
