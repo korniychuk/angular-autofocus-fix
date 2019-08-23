@@ -113,7 +113,7 @@ const configMock = (): Mutable<AutofocusFixConfig> => ({
   smartEmptyCheck: false,
 });
 
-describe('AutofocusFixDirective', () => {
+describe(AutofocusFixDirective.prototype.constructor.name, () => {
   let comp: TestWrapperComponent;
   let fixture: ComponentFixture<TestWrapperComponent>;
 
@@ -372,7 +372,7 @@ describe('AutofocusFixDirective', () => {
     });
   }); // end :: SCENARIO: Autofocus on creation
 
-  describe('SCENARIO: Triggering Change Detection', () => {
+  describe('SCENARIO: Triggering Change Detection after focusing', () => {
     describe('GIVEN: Multiple directives on the same HTMLElement', () => {
 
       describe('WHEN: triggerChangeDetection === false (default)', () => {
