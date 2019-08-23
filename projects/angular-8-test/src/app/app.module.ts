@@ -15,10 +15,11 @@ import { MaterialTestModule } from './material-test/material-test.module';
     BrowserModule,
     CommonModule,
 
-    AutofocusFixModule,
+    AutofocusFixModule.forRoot(),
 
     MaterialTestModule,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [],
 })
 export class AppModule { }

@@ -8,10 +8,6 @@ import { AutofocusFixModule } from 'ngx-autofocus-fix';
 
 import { MaterialTestComponent } from './material-test.component';
 
-// {
-//   triggerDetectChanges: true,
-// }
-
 @NgModule({
   imports: [
     CommonModule,

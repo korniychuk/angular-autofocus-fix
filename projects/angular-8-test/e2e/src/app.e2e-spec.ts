@@ -3,6 +3,8 @@ import { browser, logging, protractor } from 'protractor';
 
 const expectedAngularMajorVersion = 8;
 
+// @todo: check loosing focus
+
 describe(`Angular ${expectedAngularMajorVersion}`, () => {
   let page: AppPage;
 

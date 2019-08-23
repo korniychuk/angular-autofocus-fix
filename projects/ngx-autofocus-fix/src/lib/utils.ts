@@ -1,3 +1,6 @@
+export type MutablePartial<T> = { -readonly [K in keyof T]+?: T[K] };
+export type Mutable<T> = { -readonly [K in keyof T]: T[K] };
+
 export function normalizeInputAsBoolean(value: any, smartEmptyCheck: boolean = false): boolean {
   const isFalse = value === false
                || value === null

@@ -29,6 +29,7 @@ import { environment } from '../../environments';
                  [value]="v"
                  matInput
                  [autofocus]="!(i % 2)"
+                 autofocusFixTriggerDetectChanges
                  [attr.e2e-attr]="'input-' + i"
           >
         </mat-form-field>

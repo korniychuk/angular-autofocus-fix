@@ -3,4 +3,4 @@
  */
 
 export { AutofocusFixModule } from './lib/autofocus-fix.module';
-export { AutofocusFixOptions } from './lib/autofocus-fix-config';
+export { AutofocusFixConfig, AutofocusFixOptions } from './lib/autofocus-fix-config';

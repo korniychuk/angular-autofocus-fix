@@ -2,24 +2,7 @@ import { ModuleWithProviders, NgModule, Optional } from '@angular/core';
 
 import { AutofocusFixDirective } from './autofocus-fix.directive';
 import { AutofocusFixConfig, AutofocusFixOptions } from './autofocus-fix-config';
-
-function noConfigError() {
-  const moduleName = AutofocusFixModule.prototype.constructor.name;
-
-  throw new Error(`${moduleName}: Can't inject ${AutofocusFixConfig.name}.
-    Did you forgot to import the module using .forRoot() ?
-
-    @NgModule({
-      ...
-      imports: [
-        ...
-        ${moduleName}.forRoot(),     <---
-      ],
-      ...
-    })
-    export class AppModule {}
-`);
-}
+import { noAutofocusFixConfigError } from './no-autofocus-fix-config.error';
 
 @NgModule({
   declarations: [AutofocusFixDirective],
@@ -28,8 +11,9 @@ function noConfigError() {
 export class AutofocusFixModule {
 
   public constructor(@Optional() $config: AutofocusFixConfig) {
-    if (!$config) { noConfigError(); }
-    // @todo: check multiple config instances
+    if (!$config) {
+      noAutofocusFixConfigError();
+    }
   }
 
   public static forRoot(options: AutofocusFixOptions = {}): ModuleWithProviders {

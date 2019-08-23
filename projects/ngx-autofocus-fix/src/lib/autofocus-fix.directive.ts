@@ -1,17 +1,19 @@
 import {
-  AfterViewInit,
+  AfterContentInit,
   ChangeDetectorRef,
   Directive,
   ElementRef,
   Inject,
   Input,
-  OnChanges,
+  OnChanges, OnInit,
   SimpleChange,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
-import { normalizeInputAsBoolean } from './utils';
+import { normalizeInputAsBoolean, MutablePartial, Mutable } from './utils';
 import { AutofocusFixConfig } from './autofocus-fix-config';
+
+// @todo: check configuration
 
 /**
  * ## Ways to turn off autofocus: any js-falsely value, except empty string
@@ -53,7 +55,7 @@ import { AutofocusFixConfig } from './autofocus-fix-config';
 @Directive({
   selector: '[autofocus]',
 })
-export class AutofocusFixDirective implements OnChanges, AfterViewInit {
+export class AutofocusFixDirective implements OnChanges, OnInit, AfterContentInit {
 
   /** Raw value. Always have default value: '' */
   @Input()
@@ -61,16 +63,19 @@ export class AutofocusFixDirective implements OnChanges, AfterViewInit {
 
   /** @see {@link AutofocusFixConfig.smartEmptyCheck} */
   @Input()
-  public autofocusFixSmartEmptyCheck?: boolean;
+  public autofocusFixSmartEmptyCheck?: boolean | any;
 
   /** @see {@link AutofocusFixConfig.triggerDetectChanges} */
   @Input()
-  public autofocusFixTriggerDetectChanges?: boolean;
+  public autofocusFixTriggerDetectChanges?: boolean | any;
 
   /** @see {@link AutofocusFixConfig.async} */
   @Input()
-  public autofocusFixAsync?: boolean;
+  public autofocusFixAsync?: boolean | any;
 
+  private wasInitialized = false;
+  private localConfig: MutablePartial<AutofocusFixConfig> = {};
+  private config!: Mutable<AutofocusFixConfig>;
   private autofocusEnabled = false;
   private control?: HTMLElement;
 
@@ -82,65 +87,61 @@ export class AutofocusFixDirective implements OnChanges, AfterViewInit {
     private readonly $config: AutofocusFixConfig,
   ) {}
 
-  public ngOnChanges(changes: { [key in keyof AutofocusFixDirective]?: SimpleChange }) {
-    let needCheckFocus = false;
+  public ngOnChanges(changes: { [key in keyof AutofocusFixDirective]?: SimpleChange }): void {
+    // Autofocus works only once. No need to do the initialization on each change detection cycle.
+    if (this.wasInitialized) { return; }
 
-    if (changes.autofocus || changes.autofocusFixSmartEmptyCheck) {
-      this.autofocusEnabled = normalizeInputAsBoolean(this.autofocus, this.isSmartEmptyCheck);
-      needCheckFocus = true;
-    }
-
-    if (needCheckFocus) {
-      this.checkFocus();
-    }
+    this.normalizeLocalConfigItem('async', changes.autofocusFixAsync);
+    this.normalizeLocalConfigItem('smartEmptyCheck', changes.autofocusFixSmartEmptyCheck);
+    this.normalizeLocalConfigItem('triggerDetectChanges', changes.autofocusFixTriggerDetectChanges);
   }
 
-  public ngAfterViewInit(): void {
+  public ngOnInit(): void {
+    this.config = {} as AutofocusFixConfig;
+    AutofocusFixConfig.keys.forEach(key => {
+      const local = this.localConfig[key];
+      this.config[key] = local !== undefined ? local : this.$config[key];
+    });
+
+    this.autofocusEnabled = normalizeInputAsBoolean(this.autofocus, this.config.smartEmptyCheck);
+  }
+
+  public ngAfterContentInit(): void {
+    this.wasInitialized = true;
     const el: HTMLElement = this.$er.nativeElement;
-    if (el.focus) {
-      this.control = el;
-      this.checkFocus();
-    } else {
-      console.warn(
+    if (!el.focus) {
+      return console.warn(
         'AutofocusFixDirective: There is no .focus() method on the element: %O. Directive initialized',
         el,
       );
     }
+
+    this.control = el;
+    this.checkFocus();
   }
 
   private checkFocus(): void {
-    this.isAsync ? setTimeout(this.checkFocusInternal.bind(this)) : this.checkFocusInternal();
+    this.config.async ? setTimeout(this.checkFocusInternal.bind(this)) : this.checkFocusInternal();
   }
 
   private checkFocusInternal(): void {
     if (!this.control || !this.autofocusEnabled || this.amIFocused) { return; }
 
     this.control.focus();
-    if (this.isTriggerChangeDetection) { this.$cdr.detectChanges(); }
-  }
-
-  // @todo: test it
-  protected get isAsync(): boolean {
-    return this.autofocusFixAsync !== undefined ? !!this.autofocusFixAsync : this.$config.async;
-  }
-
-  // @todo: test it
-  protected get isSmartEmptyCheck(): boolean {
-    return this.autofocusFixSmartEmptyCheck !== undefined
-           ? !!this.autofocusFixSmartEmptyCheck
-           : this.$config.smartEmptyCheck;
-  }
-
-  // @todo: test it
-  protected get isTriggerChangeDetection(): boolean {
-    return this.autofocusFixTriggerDetectChanges !== undefined
-           ? !!this.autofocusFixTriggerDetectChanges
-           : this.$config.triggerDetectChanges;
+    if (this.config.triggerDetectChanges) {
+      this.$cdr.detectChanges();
+    }
   }
 
   // @todo: test it
   private get amIFocused(): boolean {
     return this.$document.activeElement === this.$er.nativeElement;
+  }
+
+  private normalizeLocalConfigItem(configKey: keyof AutofocusFixConfig, change?: SimpleChange): void {
+    if (change) {
+      this.localConfig[configKey] = normalizeInputAsBoolean(change.currentValue);
+    }
   }
 
 }

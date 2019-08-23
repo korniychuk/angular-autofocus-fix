@@ -12,6 +12,7 @@ Angular 5+ directive for fix autofocus on dinamically created controls (`*ngIf`,
 * The library understands an extensive list of input data. (`null/NaN/'true'/[]/...`, not only boolean). See [Advanced examples](#advanced-examples)
 * Supports asynchronous focusing.
 * Works perfect with Angular Material. (there is an E2E test)
+* Works with AOT mode.
 
 ## Installation
 

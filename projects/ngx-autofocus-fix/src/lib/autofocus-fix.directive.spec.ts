@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { AutofocusFixDirective } from './autofocus-fix.directive';
+import { AutofocusFixConfig } from './autofocus-fix-config';
 
 @Component({
   selector: 'no-focusable',
@@ -44,6 +45,12 @@ export class TestWrapperComponent {
   public smartEmptyCheck = false;
 }
 
+const configMock = (): { [key in keyof AutofocusFixConfig]: AutofocusFixConfig[key] } => ({
+  async: false,
+  triggerDetectChanges: false,
+  smartEmptyCheck: false,
+});
+
 describe('AutofocusFixDirective', () => {
   let comp: TestWrapperComponent;
   let fixture: ComponentFixture<TestWrapperComponent>;
@@ -63,6 +70,12 @@ describe('AutofocusFixDirective', () => {
       .configureTestingModule({
         imports: [CommonModule],
         declarations: [TestWrapperComponent, NoFocusableComponent, AutofocusFixDirective],
+        providers: [
+          {
+            provide: AutofocusFixConfig,
+            useFactory: configMock,
+          },
+        ],
       })
       .compileComponents();
 
