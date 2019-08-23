@@ -42,7 +42,11 @@ module.exports = function(wallaby) {
       ...projects.map(project => ({
         pattern: project.sourceRoot + '/**/*.d.ts',
         ignore: true
-      }))
+      })),
+      ...projects.map(project => ({
+        pattern: project.sourceRoot + '/**/test.ts',
+        ignore: true
+      })),
     ],
 
     tests: [
