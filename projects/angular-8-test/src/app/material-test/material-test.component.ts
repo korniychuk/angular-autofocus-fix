@@ -24,13 +24,13 @@ import { environment } from '../../environments';
       <div class="material-inputs">
         <mat-form-field *ngFor="let v of numbers$ | async; index as i">
           <input type="text"
-                 class="autofocus-input"
+                 class="autofocus-material-input"
                  name="hello"
                  [value]="v"
                  matInput
                  [autofocus]="!(i % 2)"
                  autofocusFixTriggerDetectChanges
-                 [attr.e2e-attr]="'input-' + i"
+                 [attr.e2e-attr]="'material-input-' + i"
           >
         </mat-form-field>
       </div>

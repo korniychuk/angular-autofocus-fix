@@ -6,6 +6,10 @@ export class AppPage {
     return browser.get(browser.baseUrl);
   }
 
+  public getAngularVersion() {
+    return element(by.css('app-root')).getAttribute('ng-version');
+  }
+
   public getTitleText() {
     return element(by.css('app-root h1')).getText();
   }
@@ -14,20 +18,37 @@ export class AppPage {
     return element(by.css(':focus')).getAttribute('e2e-attr') as Promise<string>;
   }
 
-  public getInputsCount() {
-    return browser.$$('.autofocus-input').count();
-  }
-
-  public getRunButton() {
-    return element(by.css('[e2e-attr=run]'));
-  }
-
   public getElementByE2eAttr(value: string) {
     return element(by.css(`[e2e-attr=${value}]`));
   }
 
-  public getAngularVersion() {
-    return element(by.css('app-root')).getAttribute('ng-version');
+  public getElementsCount(selector: string) {
+    return browser.$$(selector).count();
   }
+
+  //
+  // Simple Inputs
+  //
+
+  public getSimpleInputCount() {
+    return this.getElementsCount('.autofocus-input');
+  }
+
+  public getSimpleRunButton() {
+    return element(by.css('[e2e-attr=run]'));
+  }
+
+  //
+  // Material Inputs
+  //
+
+  public getMaterialInputCount() {
+    return this.getElementsCount('.autofocus-material-input');
+  }
+
+  public getMaterialRunButton() {
+    return element(by.css('[e2e-attr=run-material]'));
+  }
+
 
 }

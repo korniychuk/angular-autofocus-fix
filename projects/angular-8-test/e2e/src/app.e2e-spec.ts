@@ -1,9 +1,8 @@
-import { AppPage } from './app.po';
 import { browser, logging, protractor } from 'protractor';
+import { environment } from '../../src/environments/environment';
+import { AppPage } from './app.po';
 
 const expectedAngularMajorVersion = 8;
-
-// @todo: check loosing focus
 
 describe(`Angular ${expectedAngularMajorVersion}`, () => {
   let page: AppPage;
@@ -24,7 +23,7 @@ describe(`Angular ${expectedAngularMajorVersion}`, () => {
     });
   });
 
-  describe('SCENARIO: Autofocusing', () => {
+  describe('SCENARIO: Autofocusing simple inputs', () => {
 
     beforeAll( () => {
       browser.waitForAngularEnabled(false);
@@ -34,20 +33,56 @@ describe(`Angular ${expectedAngularMajorVersion}`, () => {
       browser.waitForAngularEnabled(true);
     });
 
-    it('Should move focus to the each newly create input', async () => {
-      page.getRunButton().click();
-      expect(page.getInputsCount()).toBe(0);
+    it('Should move focus to the each even newly create input', async () => {
+      page.getSimpleRunButton().click();
+      expect(page.getSimpleInputCount()).toBe(0);
 
       await browser.sleep(25);
-      expect(page.getInputsCount()).toBe(0);
+      expect(page.getSimpleInputCount()).toBe(0);
 
       const until = protractor.ExpectedConditions;
       for (let i = 0; i < 5; i++) {
-        await browser.wait(until.presenceOf(page.getElementByE2eAttr('input-' + i)), 150, 'Element taking too long to appear in the DOM');
+        await browser.wait(
+          until.presenceOf(page.getElementByE2eAttr('input-' + i)),
+          environment.inputsGenerationIntervalMs + 50,
+          'Element taking too long to appear in the DOM',
+        );
 
-        expect(page.getInputsCount()).toBe(i + 1);
+        expect(page.getSimpleInputCount()).toBe(i + 1);
         const focusIndex = i - i % 2;
         expect(page.getE2eAttrOfFocusedElement()).toBe('input-' + focusIndex);
+      }
+    });
+  });
+
+  describe('SCENARIO: Autofocusing Angular Material inputs', () => {
+
+    beforeAll( () => {
+      browser.waitForAngularEnabled(false);
+    });
+
+    afterAll(() => {
+      browser.waitForAngularEnabled(true);
+    });
+
+    it('Should move focus to the each even newly create input', async () => {
+      page.getMaterialRunButton().click();
+      expect(page.getMaterialInputCount()).toBe(0);
+
+      await browser.sleep(25);
+      expect(page.getMaterialInputCount()).toBe(0);
+
+      const until = protractor.ExpectedConditions;
+      for (let i = 0; i < 5; i++) {
+        await browser.wait(
+          until.presenceOf(page.getElementByE2eAttr('material-input-' + i)),
+          environment.inputsGenerationIntervalMs + 50,
+          'Element taking too long to appear in the DOM',
+        );
+
+        expect(page.getMaterialInputCount()).toBe(i + 1);
+        const focusIndex = i - i % 2;
+        expect(page.getE2eAttrOfFocusedElement()).toBe('material-input-' + focusIndex);
       }
     });
   });
