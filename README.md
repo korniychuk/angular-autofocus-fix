@@ -1,12 +1,11 @@
 # ngx-autofocus-fix
 
-Angular 5+ directive for fix autofocus on dynamically created controls (`*ngIf`, `*ngFor`, etc.).
-
+Angular 5+ directive for fix autofocus on dynamically created controls (`*ngIf`, `*ngFor`, etc.).  
 [legacy version for Angular 2/4](https://github.com/korniychuk/angular-autofocus-fix/tree/legacy-version)
 
 ![Autofocus Demo](demo.gif)
 
-## Advantages over other libraries
+## Advantages over the other libraries
 
 * **Uses native HTML attribute `autofocus` as the selector!** [example](#quick-start)
 * There are no custom selectors, no need to change your HTML template.
@@ -77,7 +76,7 @@ export class AppModule { }
 
 ## Advanced examples
 
-Ways to **disable autofocus:** any js-falsy value, except an empty string (default `@Input`'s [normalization mode](inputs-smart-empty-check-normalization-mode))
+Ways to **disable autofocus:** any js-falsy value, except an empty string (default `@Input`'s [normalization mode](#inputs-smart-empty-check-normalization-mode))
 
 ```html
    <!-- with data binding -->
@@ -98,7 +97,7 @@ Ways to **disable autofocus:** any js-falsy value, except an empty string (defau
    <input> <!-- disabled by default -->
 ``` 
 
-Ways to **enable autofocus:** any js-truthy value and an empty string (default `@Input`'s [normalization mode](inputs-smart-empty-check-normalization-mode))
+Ways to **enable autofocus:** any js-truthy value and an empty string (default `@Input`'s [normalization mode](#inputs-smart-empty-check-normalization-mode))
 
 ```html
    <!-- an empty string will enable autofocus, this is default HTML behavior -->
@@ -143,13 +142,65 @@ There are three ways to change the `AutofocusFixDirective`:
    <input type="text"
           autofocus
           autofocusFixAsync
+          autofocusFixSmartEmptyCheck
+          autofocusFixTriggerDetectChanges
    >
    ```
-TODO: finish
+   [Normalization](#inputs-smart-empty-check-normalization-mode)(only default) available and binding supported.
+   ```html
+   <input type="text"
+          autofocus
+          [autofocusFixAsync]="true"
+          [autofocusFixSmartEmptyCheck]="true"
+          [autofocusFixTriggerDetectChanges]="true"
+   >
+
+   <input type="text"
+          autofocus
+          autofocusFixAsync="true"
+          [autofocusFixSmartEmptyCheck]="isSmart"
+          autofocusFixTriggerDetectChanges="a truthy value"
+   >
+   ```
+
 **2. Specify global options for the whole application by passing it to `.forRoot({ ... })`**
-TODO: finish
+  ```typescript
+  @NgModule({
+    ...
+    imports: [
+      ...
+      AutofocusFixModule.forRoot({
+        async: true,
+        smartEmptyCheck: true,
+        triggerDetectChanges: true,
+      }),
+    ],
+    ...
+  })
+  export class AppModule { }
+  ```
+
 **3. Provide Lazy-Route level or Component level config `new AutofocusFixConfig({ ... })`**
-TODO: finish
+  ```typescript
+  import { Component, Provider } from '@angular/core';
+  import { AutofocusFixConfig } from 'ngx-autofocus-fix';
+
+  const autofocusFixConfigProvider: Provider = {
+    provide: AutofocusFixConfig,
+    useValue: new AutofocusFixConfig({
+      async: true,
+      smartEmptyCheck: true,
+      triggerDetectChanges: true,
+    }),
+  };
+
+  @Component({
+    ...
+    providers: [ autofocusFixConfigProvider ],
+  })
+  export class MyComponent {}
+  ```
+
 
 ## Development
 TODO: finish
