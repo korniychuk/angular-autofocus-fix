@@ -2,6 +2,8 @@
 
 Angular 5+ directive for fix autofocus on dynamically created controls (`*ngIf`, `*ngFor`, etc.).
 
+TODO: add an image, may be gif here
+
 ## Advantages over other libraries
 
 * **Uses native HTML attribute `autofocus` as the selector!**  
