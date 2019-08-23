@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "npm run serve -- angular-8-test",
+    "serve": "ng serve",
+    "serve:prod": "npm run serve -- --aot --prod=true",
     "build": "ng build",
     "test-lib:ci": "ng test ngx-autofocus-fix --no-watch --no-progress --browsers=ChromeHeadlessCI",
     "test-lib": "ng test --browsers=ChromeHeadlessCI",

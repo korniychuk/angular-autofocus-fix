@@ -3,6 +3,8 @@
 Angular 5+ directive for fix autofocus on dynamically created controls (`*ngIf`, `*ngFor`, etc.).  
 [legacy version for Angular 2/4](https://github.com/korniychuk/angular-autofocus-fix/tree/legacy-version)
 
+[Online Demo](https://stackblitz.com/edit/ngx-autofocus-fix-demo) (Stackblitz.com)
+
 ![Autofocus Demo](demo.gif)
 
 ## Advantages over the other libraries
@@ -17,13 +19,6 @@ Angular 5+ directive for fix autofocus on dynamically created controls (`*ngIf`,
 * Works perfectly with Angular Material. (there is an E2E test)
 * Works with AOT mode. (tested via E2E test)
 * [Configurable](#configuration). Use can use input attributes or provide global options via `AutofocusFixConfig`
-
-## Online demos:
-
-* [The simplest case](...)
-* [Smart mode](...)
-* [Global config (`AutofocusFixConfig`) - simple example](...)
-* [Complex example (Angular Material, Infinite scroll, Multiple global configs)](...)
 
 ## Installation
 
@@ -230,12 +225,18 @@ There are four ways to configure the `AutofocusFixDirective`:
 
 
 ## Development
-TODO: finish
 
-To generate all `*.js`, `*.d.ts` and `*.metadata.json` files:
+Build the library:
 
 ```bash
 $ npm run build
+```
+
+Publish the library:
+
+```bash
+cd dist/ngx-autofocus-fix
+npm publish
 ```
 
 To lint all `*.ts` files:
@@ -244,6 +245,31 @@ To lint all `*.ts` files:
 $ npm run lint
 ```
 
+To run library unit-tests:
+
+```bash
+$ npm run test-lib
+```
+
+To run e2e tests:
+
+```bash
+$ npm run e2e -- --prod=true
+```
+
+To run local dev server [http://localhost:4200](http://localhost:4200):
+
+```bash
+$ npm start
+$ npm run serve:prod -- angular-8-test # AoT & Prod env
+```
+
+
 ## License
 
-MIT © [Anton Korniychuk](mailto:dev@korniychuk.pro)
+[MIT](http://localhost:4200) © [Anton Korniychuk](https://korniychuk.pro)
+
+## Author
+
+| [<img src="https://www.korniychuk.pro/avatar.jpg" width="100px;"/><br /><sub>Anton Korniychuk</sub>](https://korniychuk.pro) |
+| :---: |
