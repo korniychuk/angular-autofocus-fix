@@ -78,15 +78,17 @@ export class AutofocusFixDirective implements OnChanges, OnInit, AfterContentIni
   protected localConfig: MutablePartial<AutofocusFixConfig> = {};
   private config!: Mutable<AutofocusFixConfig>;
   private autofocusEnabled = false;
-  private control?: HTMLElement;
+  private readonly element: HTMLElement;
 
   public constructor(
-    private readonly $er: ElementRef,
+    $er: ElementRef,
     private readonly $cdr: ChangeDetectorRef,
     @Inject(DOCUMENT)
     private readonly $document: Document,
     private readonly $config: AutofocusFixConfig,
-  ) {}
+  ) {
+    this.element = $er.nativeElement;
+  }
 
   public ngOnChanges(changes: { [key in keyof AutofocusFixDirective]?: SimpleChange }): void {
     // Autofocus works only once. No need to do the initialization on each change detection cycle.
@@ -98,6 +100,13 @@ export class AutofocusFixDirective implements OnChanges, OnInit, AfterContentIni
   }
 
   public ngOnInit(): void {
+    if (!this.element.focus) {
+      return console.warn(
+        'AutofocusFixDirective: There is no .focus() method on the element: %O. Directive initialized',
+        this.element,
+      );
+    }
+
     this.config = {} as AutofocusFixConfig;
     AutofocusFixConfig.keys.forEach(key => {
       const local = this.localConfig[key];
@@ -109,15 +118,8 @@ export class AutofocusFixDirective implements OnChanges, OnInit, AfterContentIni
 
   public ngAfterContentInit(): void {
     this.wasInitialized = true;
-    const el: HTMLElement = this.$er.nativeElement;
-    if (!el.focus) {
-      return console.warn(
-        'AutofocusFixDirective: There is no .focus() method on the element: %O. Directive initialized',
-        el,
-      );
-    }
+    if (!this.element.focus) { return; }
 
-    this.control = el;
     this.checkFocus();
   }
 
@@ -126,9 +128,9 @@ export class AutofocusFixDirective implements OnChanges, OnInit, AfterContentIni
   }
 
   private checkFocusInternal(): void {
-    if (!this.control || !this.autofocusEnabled || this.amIFocused) { return; }
+    if (!this.element || !this.autofocusEnabled || this.amIFocused) { return; }
 
-    this.control.focus();
+    this.element.focus();
     if (this.config.triggerDetectChanges) {
       this.$cdr.detectChanges();
     }
@@ -136,7 +138,7 @@ export class AutofocusFixDirective implements OnChanges, OnInit, AfterContentIni
 
   // @todo: test it
   private get amIFocused(): boolean {
-    return this.$document.activeElement === this.$er.nativeElement;
+    return this.$document.activeElement === this.element;
   }
 
   private normalizeLocalConfigItem(configKey: keyof AutofocusFixConfig, change?: SimpleChange): void {
