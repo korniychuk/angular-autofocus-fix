@@ -37,9 +37,9 @@ $ yarn add ngx-autofocus-fix
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppComponent } from './app.component';
+import { AutofocusFixModule } from 'ngx-autofocus-fix'; // <--- new code
 
-import { NgxAutofocusFixModule } from 'ngx-autofocus-fix'; // <--- new code
+import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +48,7 @@ import { NgxAutofocusFixModule } from 'ngx-autofocus-fix'; // <--- new code
   imports: [
     BrowserModule,
 
-    NgxAutofocusFixModule, // <--- new code
+    AutofocusFixModule, // <--- new code
   ],
   providers: [],
   bootstrap: [ AppComponent ]
@@ -75,9 +75,7 @@ export class AppModule { }
 
 ## Advanced examples
 
-### Default params normalization mode
-
-Ways to **disable autofocus:** any js-falsely value, except empty string
+Ways to **disable autofocus:** any js-falsy value, except an empty string
 
 ```html
    <!-- with data binding -->
@@ -98,15 +96,13 @@ Ways to **disable autofocus:** any js-falsely value, except empty string
    <input> <!-- disabled by default -->
 ``` 
 
-Ways to **enable autofocus:** any js-true value and empty string
+Ways to **enable autofocus:** any js-truthy value and an empty string
 
 ```html
-   <!-- empty string will enable autofocus, this is default html behavior -->
-   <input [autofocus]="{}">
-   <input [autofocus]="[]">
+   <!-- an empty string will enable autofocus, this is default HTML behavior -->
    <input [autofocus]="''">
    <input autofocus="">
-   <input autofocus>
+   <input autofocus> <!-- this is an empty string too -->
    
    <input autofocus="autofocus">
    
@@ -116,13 +112,25 @@ Ways to **enable autofocus:** any js-true value and empty string
    
    <input [autofocus]="'any other values'">
    <input autofocus="any other values">
+
+   <input [autofocus]="{}">
+   <input [autofocus]="[]">
 ```
 
-### Smart Empty Check params normalization mode
+## Input's Smart Empty Check normalization mode
 
-Smart Empty Check mode can be enabled locally by adding `autofocusFixSmartEmptyCheck` attribute or using global options. See (Configuration)[#configuration]
+All input values are passed through the function: `normalizeInputAsBoolean(value: any, smartEmptyCheck = false): boolean`.
 
-TODO: finish
+Smart Empty Check mode changes the behavior so that the following values are treated as falsy:
+* An empty string `''`
+* An empty object `{}`
+* An empty array `[]`
+
+See [Configuration](#configuration) to understand how to enable the mode.
+
+**Notes:**
+* Smart Empty Check normalization mode available only for `autofocus` attribute. All other directive `@Input`'s always works in the default normalization mode.
+* Using attribute `autofocus` without any value doesn't enable autofocusing in Smart Empty Check mode. Because of an empty value means an empty string in terms of Angular templates syntax. 
 
 ## Configuration
 
