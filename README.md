@@ -135,7 +135,7 @@ See [Configuration](#configuration) to understand how to enable the mode.
 
 ## Configuration
 
-There are three ways to change the `AutofocusFixDirective`:
+There are four ways to configure the `AutofocusFixDirective`:
 
 **1. Specify attribute-options for specific HTML Element**
    ```html
@@ -180,7 +180,34 @@ There are three ways to change the `AutofocusFixDirective`:
   export class AppModule { }
   ```
 
-**3. Provide Lazy-Route level or Component level config `new AutofocusFixConfig({ ... })`**
+**3. Provide Lazy-Route level `AutofocusFixConfig` config**
+
+  ```typescript
+  import { NgModule } from '@angular/core';
+  import { AutofocusFixModule, AutofocusFixConfig } from 'ngx-autofocus-fix';
+
+
+  const autofocusFixConfigProvider: Provider = {
+    provide: AutofocusFixConfig,
+    useValue: new AutofocusFixConfig({
+      async: true,
+      smartEmptyCheck: true,
+      triggerDetectChanges: true,
+    }),
+  };
+
+  @NgModule({
+    ...
+    imports: [
+      ...
+      AutofocusFixModule,
+    ],
+    providers: [ autofocusFixConfigProvider ],
+  })
+  export class MyLazyLoadableModule { }
+  ```
+
+**4. Provide Component level `AutofocusFixConfig` config**
   ```typescript
   import { Component, Provider } from '@angular/core';
   import { AutofocusFixConfig } from 'ngx-autofocus-fix';
