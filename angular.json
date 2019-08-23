@@ -98,14 +98,6 @@
                   "maximumError": "10kb"
                 }
               ]
-            },
-            "test": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.test.ts"
-                }
-              ]
             }
           }
         },
@@ -117,9 +109,6 @@
           "configurations": {
             "production": {
               "browserTarget": "angular-8-test:build:production"
-            },
-            "test": {
-              "browserTarget": "angular-8-test:build:test"
             }
           }
         },

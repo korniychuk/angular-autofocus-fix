@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  inputsGenerationIntervalMs: 1000,
+  inputsGenerationIntervalMs: 100,
 };
