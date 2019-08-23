@@ -1,10 +1,15 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, Directive, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { AutofocusFixDirective } from './autofocus-fix.directive';
 import { AutofocusFixConfig } from './autofocus-fix-config';
+import { Mutable, MutablePartial } from './utils';
+
+class TestAutofocusFixDirective extends AutofocusFixDirective {
+  public localConfig!: MutablePartial<AutofocusFixConfig>;
+}
 
 @Component({
   selector: 'no-focusable',
@@ -15,6 +20,20 @@ export class NoFocusableComponent implements OnInit {
 
   ngOnInit() {
     (this.$element.nativeElement as HTMLElement).focus = undefined as any;
+  }
+}
+
+@Directive({ selector: '[focus-binding]', exportAs: 'focusBinding' })
+export class FocusBindingDirective {
+
+  public constructor(
+    @Inject(DOCUMENT)
+    private readonly $document: Document,
+    private readonly $el: ElementRef,
+  ) {}
+
+  public get isFocused(): boolean {
+    return this.$el.nativeElement === this.$document.activeElement;
   }
 }
 
@@ -36,16 +55,38 @@ export class NoFocusableComponent implements OnInit {
     <div *ngIf="showNoFocusable">
       <no-focusable autofocus></no-focusable>
     </div>
+    <div *ngIf="showFocusBinding">
+      <input type="text" autofocus focus-binding>
+      {{ focusBinding?.isFocused }} <!-- for triggering ExpressionChangedAfterItHasBeenCheckedError -->
+    </div>
+    <div *ngIf="showFocusBindingWithTriggerChangeDetection">
+      <input type="text" autofocus autofocusFixTriggerDetectChanges focus-binding>
+      {{ focusBinding?.isFocused }} <!-- for triggering ExpressionChangedAfterItHasBeenCheckedError -->
+    </div>
+    <div *ngIf="showAsync">
+      <input type="text" autofocus autofocusFixAsync>
+    </div>
   `,
 })
 export class TestWrapperComponent {
+  @ViewChild(FocusBindingDirective, { static: false })
+  public focusBinding!: FocusBindingDirective;
+
+  @ViewChild(AutofocusFixDirective, { static: false })
+  public dir!: TestAutofocusFixDirective;
+
   public showNoFocusable = false;
   public show: boolean[] = Array(4).fill(false);
   public autofocusValue: any = true;
   public smartEmptyCheck = false;
+
+  public showFocusBinding = false;
+  public showFocusBindingWithTriggerChangeDetection = false;
+
+  public showAsync = false;
 }
 
-const configMock = (): { [key in keyof AutofocusFixConfig]: AutofocusFixConfig[key] } => ({
+const configMock = (): Mutable<AutofocusFixConfig> => ({
   async: false,
   triggerDetectChanges: false,
   smartEmptyCheck: false,
@@ -55,12 +96,12 @@ describe('AutofocusFixDirective', () => {
   let comp: TestWrapperComponent;
   let fixture: ComponentFixture<TestWrapperComponent>;
 
-  function getInput(num: number): HTMLElement | undefined {
+  function getInput(num: number): HTMLElement | undefined | null {
     const debugElement = fixture.debugElement.query(By.css('.input-' + num));
     return debugElement && debugElement.nativeElement;
   }
 
-  function getFocused(): HTMLElement | undefined {
+  function getFocused(): HTMLElement | undefined | null {
     const debugElement = fixture.debugElement.query(By.css(':focus'));
     return debugElement && debugElement.nativeElement;
   }
@@ -69,7 +110,12 @@ describe('AutofocusFixDirective', () => {
     await TestBed
       .configureTestingModule({
         imports: [CommonModule],
-        declarations: [TestWrapperComponent, NoFocusableComponent, AutofocusFixDirective],
+        declarations: [
+          TestWrapperComponent,
+          NoFocusableComponent,
+          AutofocusFixDirective,
+          FocusBindingDirective,
+        ],
         providers: [
           {
             provide: AutofocusFixConfig,
@@ -259,6 +305,99 @@ describe('AutofocusFixDirective', () => {
       });
     });
 
+    describe('GIVEN: Input params changes after directive initialized', () => {
+      describe('WHEN: Change autofocusFixSmartEmptyCheck after directive initialized', () => {
+        it('THEN: .localConfig should have the previous value', () => {
+          // arrange
+          comp.show[0] = true;
+          comp.smartEmptyCheck = true;
+          fixture.detectChanges();
+
+          // pre assert
+          expect(comp.dir.autofocusFixSmartEmptyCheck).toBe(true);
+          expect(comp.dir.localConfig.smartEmptyCheck).toBe(true);
+
+          // act
+          comp.smartEmptyCheck = false;
+          fixture.detectChanges();
+
+          // assert
+          expect(comp.dir.autofocusFixSmartEmptyCheck).toBe(false);
+          expect(comp.dir.localConfig.smartEmptyCheck).toBe(true);
+        });
+      });
+    });
   }); // end :: SCENARIO: Autofocus on creation
 
+  describe('SCENARIO: Triggering Change Detection', () => {
+    describe('GIVEN: Multiple directives on the same HTMLElement', () => {
+
+      describe('WHEN: triggerChangeDetection === false (default)', () => {
+        it('THEN: Should throw ExpressionChangedAfterItHasBeenCheckedError', () => {
+          // act
+          comp.showFocusBinding = true;
+          const cb = () => fixture.detectChanges();
+
+          // assert
+          expect(cb).toThrowError(/ExpressionChangedAfterItHasBeenCheckedError/);
+        });
+      });
+
+      describe('WHEN: With autofocusFixTriggerDetectChanges attribute', () => {
+        it('THEN: Should NOT throw ExpressionChangedAfterItHasBeenCheckedError', () => {
+          comp.showFocusBindingWithTriggerChangeDetection = true;
+          fixture.detectChanges();
+        });
+      });
+
+      describe('WHEN: .triggerDetectChanges enabled via global config', () => {
+        it(
+          'THEN: Should NOT throw ExpressionChangedAfterItHasBeenCheckedError',
+          inject([AutofocusFixConfig], (config: Mutable<AutofocusFixConfig>) => {
+            config.smartEmptyCheck = true;
+            fixture.detectChanges();
+          }),
+        );
+      });
+
+    });
+  });
+
+  describe('SCENARIO: Asynchronous focusing', () => {
+    describe('GIVEN: Input should not have focus in the main execution flow', () => {
+
+      describe('WHEN: Async enabled via attribute autofocusFixAsync', () => {
+        it('THEN: Input should not be focused immediately', async () => {
+          // act
+          comp.showAsync = true;
+          fixture.detectChanges();
+
+          // assert
+          expect(getFocused()).toBeFalsy();
+          await fixture.whenStable();
+          expect(getFocused()).toBeTruthy();
+        });
+      });
+
+      describe('WHEN: .async enabled via global config', () => {
+        it(
+          'THEN: Input should not be focused immediately',
+          inject([AutofocusFixConfig], async (config: Mutable<AutofocusFixConfig>) => {
+            // arrange
+            config.async = true;
+
+            // act
+            comp.show[0] = true;
+            fixture.detectChanges();
+
+            // assert
+            expect(getFocused()).toBeFalsy();
+            await fixture.whenStable();
+            expect(getFocused()).toBeTruthy();
+          }),
+        );
+      });
+
+    });
+  });
 });

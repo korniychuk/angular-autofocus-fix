@@ -74,7 +74,8 @@ export class AutofocusFixDirective implements OnChanges, OnInit, AfterContentIni
   public autofocusFixAsync?: boolean | any;
 
   private wasInitialized = false;
-  private localConfig: MutablePartial<AutofocusFixConfig> = {};
+  /** Notice: protected for unit testing */
+  protected localConfig: MutablePartial<AutofocusFixConfig> = {};
   private config!: Mutable<AutofocusFixConfig>;
   private autofocusEnabled = false;
   private control?: HTMLElement;
