@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { NgxAutofocusFixModule } from 'ngx-autofocus-fix';
+import { AutofocusFixModule } from 'ngx-autofocus-fix';
 
 import { AppComponent } from './app.component';
 import { MaterialTestModule } from './material-test/material-test.module';
@@ -15,11 +15,10 @@ import { MaterialTestModule } from './material-test/material-test.module';
     BrowserModule,
     CommonModule,
 
-    NgxAutofocusFixModule,
+    AutofocusFixModule,
 
     MaterialTestModule,
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

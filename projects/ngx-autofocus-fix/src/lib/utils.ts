@@ -1,4 +1,4 @@
-export function normalizeBoolean(value: any, smartEmptyCheck: boolean = false): boolean {
+export function normalizeInputAsBoolean(value: any, smartEmptyCheck: boolean = false): boolean {
   const isFalse = value === false
                || value === null
                || value === undefined

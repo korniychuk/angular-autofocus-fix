@@ -1,55 +1,55 @@
-import { normalizeBoolean } from './utils';
+import { normalizeInputAsBoolean } from './utils';
 
-describe('Utils -> normalizeBoolean()', () => {
+describe('Utils -> normalizeInputAsBoolean()', () => {
 
   describe('SCENARIO: .smartEmptyCheck === false', () => {
     describe('GIVEN: Should be false', () => {
       it('false', () => {
-        expect(normalizeBoolean(false)).toBe(false);
+        expect(normalizeInputAsBoolean(false)).toBe(false);
       });
       it('null', () => {
-        expect(normalizeBoolean(null)).toBe(false);
+        expect(normalizeInputAsBoolean(null)).toBe(false);
       });
       it('undefined', () => {
-        expect(normalizeBoolean(undefined)).toBe(false);
+        expect(normalizeInputAsBoolean(undefined)).toBe(false);
       });
       it('0', () => {
-        expect(normalizeBoolean(0)).toBe(false);
+        expect(normalizeInputAsBoolean(0)).toBe(false);
       });
 
       it(`'false'`, () => {
-        expect(normalizeBoolean('false')).toBe(false);
+        expect(normalizeInputAsBoolean('false')).toBe(false);
       });
       it(`'null'`, () => {
-        expect(normalizeBoolean('null')).toBe(false);
+        expect(normalizeInputAsBoolean('null')).toBe(false);
       });
       it(`'undefined'`, () => {
-        expect(normalizeBoolean('undefined')).toBe(false);
+        expect(normalizeInputAsBoolean('undefined')).toBe(false);
       });
       it(`'0'`, () => {
-        expect(normalizeBoolean('0')).toBe(false);
+        expect(normalizeInputAsBoolean('0')).toBe(false);
       });
 
       it('NaN', () => {
-        expect(normalizeBoolean(NaN)).toBe(false);
+        expect(normalizeInputAsBoolean(NaN)).toBe(false);
       });
       it(`'NaN'`, () => {
-        expect(normalizeBoolean('NaN')).toBe(false);
+        expect(normalizeInputAsBoolean('NaN')).toBe(false);
       });
     });
 
     describe('GIVEN: Should be true', () => {
       it(`'a string'`, () => {
-        expect(normalizeBoolean('a string')).toBe(true);
+        expect(normalizeInputAsBoolean('a string')).toBe(true);
       });
       it(`''`, () => {
-        expect(normalizeBoolean('')).toBe(true);
+        expect(normalizeInputAsBoolean('')).toBe(true);
       });
       it('[]', () => {
-        expect(normalizeBoolean([])).toBe(true);
+        expect(normalizeInputAsBoolean([])).toBe(true);
       });
       it('{}', () => {
-        expect(normalizeBoolean({})).toBe(true);
+        expect(normalizeInputAsBoolean({})).toBe(true);
       });
     });
   }); // end :: SCENARIO: .smartEmptyCheck === false
@@ -57,58 +57,58 @@ describe('Utils -> normalizeBoolean()', () => {
   describe('SCENARIO: .smartEmptyCheck === true', () => {
     describe('GIVEN: Should be false', () => {
       it('false', () => {
-        expect(normalizeBoolean(false, true)).toBe(false);
+        expect(normalizeInputAsBoolean(false, true)).toBe(false);
       });
       it('null', () => {
-        expect(normalizeBoolean(null, true)).toBe(false);
+        expect(normalizeInputAsBoolean(null, true)).toBe(false);
       });
       it('undefined', () => {
-        expect(normalizeBoolean(undefined, true)).toBe(false);
+        expect(normalizeInputAsBoolean(undefined, true)).toBe(false);
       });
       it('0', () => {
-        expect(normalizeBoolean(0, true)).toBe(false);
+        expect(normalizeInputAsBoolean(0, true)).toBe(false);
       });
 
       it(`'false'`, () => {
-        expect(normalizeBoolean('false', true)).toBe(false);
+        expect(normalizeInputAsBoolean('false', true)).toBe(false);
       });
       it(`'null'`, () => {
-        expect(normalizeBoolean('null', true)).toBe(false);
+        expect(normalizeInputAsBoolean('null', true)).toBe(false);
       });
       it(`'undefined'`, () => {
-        expect(normalizeBoolean('undefined', true)).toBe(false);
+        expect(normalizeInputAsBoolean('undefined', true)).toBe(false);
       });
       it(`'0'`, () => {
-        expect(normalizeBoolean('0', true)).toBe(false);
+        expect(normalizeInputAsBoolean('0', true)).toBe(false);
       });
 
       it('NaN', () => {
-        expect(normalizeBoolean(NaN, true)).toBe(false);
+        expect(normalizeInputAsBoolean(NaN, true)).toBe(false);
       });
       it(`'NaN'`, () => {
-        expect(normalizeBoolean('NaN', true)).toBe(false);
+        expect(normalizeInputAsBoolean('NaN', true)).toBe(false);
       });
 
       it(`''`, () => {
-        expect(normalizeBoolean('', true)).toBe(false);
+        expect(normalizeInputAsBoolean('', true)).toBe(false);
       });
       it('[]', () => {
-        expect(normalizeBoolean([], true)).toBe(false);
+        expect(normalizeInputAsBoolean([], true)).toBe(false);
       });
       it('{}', () => {
-        expect(normalizeBoolean({}, true)).toBe(false);
+        expect(normalizeInputAsBoolean({}, true)).toBe(false);
       });
     });
 
     describe('GIVEN: Should be true', () => {
       it(`'a string'`, () => {
-        expect(normalizeBoolean('a string', true)).toBe(true);
+        expect(normalizeInputAsBoolean('a string', true)).toBe(true);
       });
       it('[1]', () => {
-        expect(normalizeBoolean([1], true)).toBe(true);
+        expect(normalizeInputAsBoolean([1], true)).toBe(true);
       });
       it('{ a: 1 }', () => {
-        expect(normalizeBoolean({ a: 1 }, true)).toBe(true);
+        expect(normalizeInputAsBoolean({ a: 1 }, true)).toBe(true);
       });
     });
   }); // end :: SCENARIO: .smartEmptyCheck === false

@@ -1,35 +1,30 @@
-import { InjectionToken, Provider } from '@angular/core';
-
-export const AutofocusFixConfigToken = new InjectionToken<AutofocusFixConfig>('AutofocusFixConfig');
+// import { Injectable, InjectionToken, Optional, Provider, SkipSelf } from '@angular/core';
 
 /**
  * Default Autofocus Fix params
  */
-export interface AutofocusFixConfig {
+// @Injectable()
+export class AutofocusFixConfig {
+
+  public constructor(config: AutofocusFixOptions) {
+    const keys: (keyof AutofocusFixConfig)[] = ['async', 'smartEmptyCheck', 'triggerDetectChanges'];
+
+    keys
+      .filter(name => config[name] !== undefined)
+      // @ts-ignore
+      .forEach(name => this[name] = config[name]);
+  }
+
   /**
    * In case `true` .focus() and .blur() events will be wrapped by `setTimeout(() => ...)`
-   * Default: `false`
    */
-  async?: boolean;
+  public readonly async: boolean = false;
   /**
-   * Default: `false`
    */
-  autofocusFixSmartEmptyCheck?: boolean;
+  public readonly smartEmptyCheck: boolean = false;
   /**
-   * Default: `false`
    */
-  triggerDetectChanges?: boolean;
+  public readonly triggerDetectChanges: boolean = false;
 }
 
-const defaultConfig: AutofocusFixConfig = {
-  async: false,
-  autofocusFixSmartEmptyCheck: false,
-  triggerDetectChanges: false,
-};
-
-export function provideAutofocusFixConfig(config: AutofocusFixConfig): Provider {
-  return {
-    provide: AutofocusFixConfigToken,
-    useValue: config,
-  };
-}
+export type AutofocusFixOptions = Partial<AutofocusFixConfig>;

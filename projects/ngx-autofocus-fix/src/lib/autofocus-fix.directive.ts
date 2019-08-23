@@ -1,14 +1,17 @@
 import {
+  AfterViewInit,
+  ChangeDetectorRef,
   Directive,
   ElementRef,
+  Inject,
   Input,
-  AfterViewInit,
   OnChanges,
   SimpleChange,
-  ChangeDetectorRef,
-  Injector,
 } from '@angular/core';
-import { normalizeBoolean } from './utils';
+import { DOCUMENT } from '@angular/common';
+
+import { normalizeInputAsBoolean } from './utils';
+import { AutofocusFixConfig } from './autofocus-fix-config';
 
 /**
  * ## Ways to turn off autofocus: any js-falsely value, except empty string
@@ -43,37 +46,47 @@ import { normalizeBoolean } from './utils';
  *
  *     <input [autofocus]="'any other values'">
  *
- * @todo: async
+ * @dynamic
+ * Notice: @dynamic used for correctly Document inject
+ *         https://github.com/angular/angular/issues/20351
  */
 @Directive({
   selector: '[autofocus]',
 })
 export class AutofocusFixDirective implements OnChanges, AfterViewInit {
 
-  @Input()
   /** Raw value. Always have default value: '' */
+  @Input()
   public autofocus: any;
 
+  /** @see {@link AutofocusFixConfig.smartEmptyCheck} */
   @Input()
   public autofocusFixSmartEmptyCheck?: boolean;
 
+  /** @see {@link AutofocusFixConfig.triggerDetectChanges} */
   @Input()
   public autofocusFixTriggerDetectChanges?: boolean;
 
-  private hasAutofocus = false;
+  /** @see {@link AutofocusFixConfig.async} */
+  @Input()
+  public autofocusFixAsync?: boolean;
+
+  private autofocusEnabled = false;
   private control?: HTMLElement;
 
   public constructor(
     private readonly $er: ElementRef,
     private readonly $cdr: ChangeDetectorRef,
-    private readonly $injector: Injector,
+    @Inject(DOCUMENT)
+    private readonly $document: Document,
+    private readonly $config: AutofocusFixConfig,
   ) {}
 
   public ngOnChanges(changes: { [key in keyof AutofocusFixDirective]?: SimpleChange }) {
     let needCheckFocus = false;
 
     if (changes.autofocus || changes.autofocusFixSmartEmptyCheck) {
-      this.hasAutofocus = normalizeBoolean(this.autofocus, this.autofocusFixSmartEmptyCheck);
+      this.autofocusEnabled = normalizeInputAsBoolean(this.autofocus, this.isSmartEmptyCheck);
       needCheckFocus = true;
     }
 
@@ -93,22 +106,41 @@ export class AutofocusFixDirective implements OnChanges, AfterViewInit {
         el,
       );
     }
-    // console.log('!!!', this.el, this.cdr, this.$injector.);
-    const providers = (this.$injector as any).elDef.element.publicProviders;
-    console.log('!!!', providers);
   }
 
   private checkFocus(): void {
-    if (!this.control) { return; }
+    this.isAsync ? setTimeout(this.checkFocusInternal.bind(this)) : this.checkFocusInternal();
+  }
 
-    if (this.hasAutofocus) {
-      this.control.focus();
-      // if (this.autofocusFixTriggerDetectChanges) { this.$cdr.detectChanges(); }
-      this.$cdr.checkNoChanges();
-    } else {
-      // @todo: blur
-      // this.control
-    }
+  private checkFocusInternal(): void {
+    if (!this.control || !this.autofocusEnabled || this.amIFocused) { return; }
+
+    this.control.focus();
+    if (this.isTriggerChangeDetection) { this.$cdr.detectChanges(); }
+  }
+
+  // @todo: test it
+  protected get isAsync(): boolean {
+    return this.autofocusFixAsync !== undefined ? !!this.autofocusFixAsync : this.$config.async;
+  }
+
+  // @todo: test it
+  protected get isSmartEmptyCheck(): boolean {
+    return this.autofocusFixSmartEmptyCheck !== undefined
+           ? !!this.autofocusFixSmartEmptyCheck
+           : this.$config.smartEmptyCheck;
+  }
+
+  // @todo: test it
+  protected get isTriggerChangeDetection(): boolean {
+    return this.autofocusFixTriggerDetectChanges !== undefined
+           ? !!this.autofocusFixTriggerDetectChanges
+           : this.$config.triggerDetectChanges;
+  }
+
+  // @todo: test it
+  private get amIFocused(): boolean {
+    return this.$document.activeElement === this.$er.nativeElement;
   }
 
 }

@@ -4,9 +4,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatInputModule } from '@angular/material/input';
-import { NgxAutofocusFixModule } from 'ngx-autofocus-fix';
+import { AutofocusFixModule } from 'ngx-autofocus-fix';
 
 import { MaterialTestComponent } from './material-test.component';
+
+// {
+//   triggerDetectChanges: true,
+// }
 
 @NgModule({
   imports: [
@@ -17,7 +21,7 @@ import { MaterialTestComponent } from './material-test.component';
 
     MatInputModule,
 
-    NgxAutofocusFixModule,
+    AutofocusFixModule,
   ],
   declarations: [MaterialTestComponent],
   exports: [MaterialTestComponent],
