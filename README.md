@@ -6,7 +6,7 @@ Angular 5+ directive for fix autofocus on dynamically created controls (`*ngIf`,
 
 ## Advantages over other libraries
 
-* **Uses native HTML attribute `autofocus` as the selector!**  
+* **Uses native HTML attribute `autofocus` as the selector!** [example](#quick-start)
 * There are no custom selectors, no need to change your HTML template.
 * Works with native DOM. Doesn't use any dependencies(jQuery, lodash, etc.).
 * 100% Coverage, over 60 unit tests.
@@ -14,8 +14,15 @@ Angular 5+ directive for fix autofocus on dynamically created controls (`*ngIf`,
 * The library understands an extensive list of input data. (`null/NaN/'true'/[]/...`, not only boolean). See [Advanced examples](#advanced-examples)
 * Supports asynchronous focusing (Useful for infinite scroll).
 * Works perfectly with Angular Material. (there is an E2E test)
-* Works with AOT mode.
-* Configurable. Use can use input attributes or provide global options via `AutofocusFixConfig`
+* Works with AOT mode. (tested via E2E test)
+* [Configurable](#configuration). Use can use input attributes or provide global options via `AutofocusFixConfig`
+
+## Online demos:
+
+* [The simplest case](...)
+* [Smart mode](...)
+* [Global config (`AutofocusFixConfig`) - simple example](...)
+* [Complex example (Angular Material, Infinite scroll, Multiple global configs)](...)
 
 ## Installation
 
@@ -66,16 +73,9 @@ export class AppModule { }
 <button (click)="showInput = !showInput">Toggle Input</button>
 ```
 
-## Online demos:**
-
-* [The simplest case](...)
-* [Smart mode](...)
-* [Global config (`AutofocusFixConfig`) - simple example](...)
-* [Complex example (Angular Material, Infinite scroll, Multiple global configs)](...)
-
 ## Advanced examples
 
-Ways to **disable autofocus:** any js-falsy value, except an empty string
+Ways to **disable autofocus:** any js-falsy value, except an empty string (default `@Input`'s normalization mode)
 
 ```html
    <!-- with data binding -->
@@ -96,7 +96,7 @@ Ways to **disable autofocus:** any js-falsy value, except an empty string
    <input> <!-- disabled by default -->
 ``` 
 
-Ways to **enable autofocus:** any js-truthy value and an empty string
+Ways to **enable autofocus:** any js-truthy value and an empty string (default `@Input`'s normalization mode)
 
 ```html
    <!-- an empty string will enable autofocus, this is default HTML behavior -->
