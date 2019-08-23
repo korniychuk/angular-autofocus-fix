@@ -128,7 +128,7 @@ export class AutofocusFixDirective implements OnChanges, OnInit, AfterContentIni
   }
 
   private checkFocusInternal(): void {
-    if (!this.element || !this.autofocusEnabled || this.amIFocused) { return; }
+    if (!this.autofocusEnabled || this.amIFocused) { return; }
 
     this.element.focus();
     if (this.config.triggerDetectChanges) {
