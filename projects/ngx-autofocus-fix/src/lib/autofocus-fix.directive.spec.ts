@@ -15,7 +15,7 @@ class TestAutofocusFixDirective extends AutofocusFixDirective {
   selector: 'no-focusable',
   template: ``
 })
-export class NoFocusableComponent implements OnInit {
+class NoFocusableComponent implements OnInit {
   constructor(private $element: ElementRef) {}
 
   ngOnInit() {
@@ -23,8 +23,10 @@ export class NoFocusableComponent implements OnInit {
   }
 }
 
+
+
 @Directive({ selector: '[focus-binding]', exportAs: 'focusBinding' })
-export class FocusBindingDirective {
+class FocusBindingDirective {
 
   public constructor(
     @Inject(DOCUMENT)
@@ -68,7 +70,7 @@ export class FocusBindingDirective {
     </div>
   `,
 })
-export class TestWrapperComponent {
+class TestWrapperComponent {
   @ViewChild(FocusBindingDirective, { static: false })
   public focusBinding!: FocusBindingDirective;
 
