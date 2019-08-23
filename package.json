@@ -8,7 +8,8 @@
     "test-lib:ci": "ng test ngx-autofocus-fix --no-watch --no-progress --browsers=ChromeHeadlessCI",
     "test-lib": "ng test --browsers=ChromeHeadlessCI",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "install-test-projects-deps": "cd projects/angular-8-test && npm i && cd ../angular-7-test && npm i && cd ../angular-6-test && npm i && cd ../angular-5-test && npm i"
   },
   "private": true,
   "dependencies": {

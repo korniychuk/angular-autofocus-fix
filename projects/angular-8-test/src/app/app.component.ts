@@ -8,6 +8,14 @@ import { environment } from '../environments';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  styles: [`
+    .autofocus-input {
+      width: 50px;
+    }
+    .autofocus-input + .autofocus-input {
+      margin-left: 10px;
+    }
+  `],
 })
 export class AppComponent implements OnInit {
   public title = 'angular-*-test';

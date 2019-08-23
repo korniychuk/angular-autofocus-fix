@@ -4,10 +4,11 @@ import { AutofocusFixConfig, AutofocusFixOptions } from './autofocus-fix-config'
 import { AutofocusFixDirective } from './autofocus-fix.directive';
 import { noAutofocusFixConfigError } from './no-autofocus-fix-config.error';
 
-// The factory used fot AoT support
+// Exists for AoT support
 export function configFactory(options: AutofocusFixOptions) {
   return new AutofocusFixConfig(options);
 }
+// Exists for AoT support
 const AutofocusFixOptionsInternalToken = new InjectionToken('AutofocusFixOptions');
 
 @NgModule({
