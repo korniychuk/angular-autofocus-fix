@@ -11,7 +11,7 @@ export function noAutofocusFixConfigError() {
       ...
       imports: [
         ...
-        ${ moduleName }.forRoot(),     <--- new code
+        ${ moduleName }.forRoot(),     // <--- new code
       ],
       ...
     })
@@ -25,10 +25,10 @@ export function noAutofocusFixConfigError() {
       ...
       providers: [
         ...
-        {                                          <--- new code
-          provide: ${ configName }                 <---
-          useValue: new ${configName}({ ... }),    <---
-        },                                         <---
+        {                                          // <--- new code
+          provide: ${ configName }                 // <---
+          useValue: new ${configName}({ ... }),    // <---
+        },                                         // <---
       ],
       ...
     })

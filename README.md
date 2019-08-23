@@ -1,25 +1,30 @@
 # ngx-autofocus-fix
 
-Angular 5+ directive for fix autofocus on dinamically created controls (`*ngIf`, `*ngFor`, etc.).
+Angular 5+ directive for fix autofocus on dynamically created controls (`*ngIf`, `*ngFor`, etc.).
 
 ## Advantages over other libraries
 
 * **Uses native HTML attribute `autofocus` as the selector!**  
-* There are no custom selectors, no need to change your html template.
+* There are no custom selectors, no need to change your HTML template.
 * Works with native DOM. Doesn't use any dependencies(jQuery, lodash, etc.).
-* Over 50 unit tests!
-* E2E tests for 8,7,6 and 5 versions of Angular.
+* 100% Coverage, over 60 unit tests.
+* E2E tests for 8,7,6 and 5 versions of Angular including e2e test for Angular Material Input.
 * The library understands an extensive list of input data. (`null/NaN/'true'/[]/...`, not only boolean). See [Advanced examples](#advanced-examples)
-* Supports asynchronous focusing.
-* Works perfect with Angular Material. (there is an E2E test)
+* Supports asynchronous focusing (Useful for infinite scroll).
+* Works perfectly with Angular Material. (there is an E2E test)
 * Works with AOT mode.
+* Configurable. Use can use input attributes or provide global options via `AutofocusFixConfig`
 
 ## Installation
 
 To install this library, run:
 
 ```bash
-$ npm install ngx-autofocus-fix --save
+$ npm i ngx-autofocus-fix --save
+```
+or
+```bash
+$ yarn add ngx-autofocus-fix
 ```
 
 ## Quick start
@@ -59,9 +64,16 @@ export class AppModule { }
 <button (click)="showInput = !showInput">Toggle Input</button>
 ```
 
-**Stackblitz demo:**
+## Online demos:**
+
+* [The simplest case](...)
+* [Smart mode](...)
+* [Global config (`AutofocusFixConfig`) - simple example](...)
+* [Complex example (Angular Material, Infinite scroll, Multiple global configs)](...)
 
 ## Advanced examples
+
+### Default params normalization mode
 
 Ways to **disable autofocus:** any js-falsely value, except empty string
 
@@ -104,7 +116,30 @@ Ways to **enable autofocus:** any js-true value and empty string
    <input autofocus="any other values">
 ```
 
+### Smart Empty Check params normalization mode
+
+Smart Empty Check mode can be enabled locally by adding `autofocusFixSmartEmptyCheck` attribute or using global options. See (Configuration)[#configuration]
+
+TODO: finish
+
+## Configuration
+
+**There are three ways to change the `AutofocusFixDirective`:**  
+### 1. Specify attribute-options for specific HTML Element
+   ```html
+   <input type="text"
+          autofocus
+          autofocusFixAsync
+   >
+   ```
+TODO: finish
+### 2. Specify global options for the whole application by passing it to `.forRoot({ ... })`
+TODO: finish
+### 3. Provide Lazy-Route level or Component level config `new AutofocusFixConfig({ ... })`
+TODO: finish
+
 ## Development
+TODO: finish
 
 To generate all `*.js`, `*.d.ts` and `*.metadata.json` files:
 
