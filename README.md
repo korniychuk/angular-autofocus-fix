@@ -2,6 +2,8 @@
 
 Angular 5+ directive for fix autofocus on dynamically created controls (`*ngIf`, `*ngFor`, etc.).
 
+[legacy version for Angular 2/4](https://github.com/korniychuk/angular-autofocus-fix/tree/legacy-version)
+
 ![Autofocus Demo](demo.gif)
 
 ## Advantages over other libraries
@@ -11,7 +13,7 @@ Angular 5+ directive for fix autofocus on dynamically created controls (`*ngIf`,
 * Works with native DOM. Doesn't use any dependencies(jQuery, lodash, etc.).
 * 100% Coverage, over 60 unit tests.
 * E2E tests for 8,7,6 and 5 versions of Angular including e2e test for Angular Material Input.
-* The library understands an extensive list of input data. (`null/NaN/'true'/[]/...`, not only boolean). See [Advanced examples](#advanced-examples)
+* The library understands an extensive list of input data. (`null/NaN/'true'/[]/...`). See [Advanced examples](#advanced-examples)
 * Supports asynchronous focusing (Useful for infinite scroll).
 * Works perfectly with Angular Material. (there is an E2E test)
 * Works with AOT mode. (tested via E2E test)
@@ -75,7 +77,7 @@ export class AppModule { }
 
 ## Advanced examples
 
-Ways to **disable autofocus:** any js-falsy value, except an empty string (default `@Input`'s normalization mode)
+Ways to **disable autofocus:** any js-falsy value, except an empty string (default `@Input`'s [normalization mode](inputs-smart-empty-check-normalization-mode))
 
 ```html
    <!-- with data binding -->
@@ -96,7 +98,7 @@ Ways to **disable autofocus:** any js-falsy value, except an empty string (defau
    <input> <!-- disabled by default -->
 ``` 
 
-Ways to **enable autofocus:** any js-truthy value and an empty string (default `@Input`'s normalization mode)
+Ways to **enable autofocus:** any js-truthy value and an empty string (default `@Input`'s [normalization mode](inputs-smart-empty-check-normalization-mode))
 
 ```html
    <!-- an empty string will enable autofocus, this is default HTML behavior -->
@@ -134,8 +136,9 @@ See [Configuration](#configuration) to understand how to enable the mode.
 
 ## Configuration
 
-**There are three ways to change the `AutofocusFixDirective`:**  
-### 1. Specify attribute-options for specific HTML Element
+There are three ways to change the `AutofocusFixDirective`:
+
+**1. Specify attribute-options for specific HTML Element**
    ```html
    <input type="text"
           autofocus
@@ -143,9 +146,9 @@ See [Configuration](#configuration) to understand how to enable the mode.
    >
    ```
 TODO: finish
-### 2. Specify global options for the whole application by passing it to `.forRoot({ ... })`
+**2. Specify global options for the whole application by passing it to `.forRoot({ ... })`**
 TODO: finish
-### 3. Provide Lazy-Route level or Component level config `new AutofocusFixConfig({ ... })`
+**3. Provide Lazy-Route level or Component level config `new AutofocusFixConfig({ ... })`**
 TODO: finish
 
 ## Development
