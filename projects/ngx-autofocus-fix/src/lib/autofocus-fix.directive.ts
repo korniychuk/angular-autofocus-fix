@@ -102,7 +102,7 @@ export class AutofocusFixDirective implements OnChanges, OnInit, AfterContentIni
   public ngOnInit(): void {
     if (!this.element.focus) {
       return console.warn(
-        'AutofocusFixDirective: There is no .focus() method on the element: %O. Directive initialized',
+        'AutofocusFixDirective: There is no .focus() method on the element: %O',
         this.element,
       );
     }
