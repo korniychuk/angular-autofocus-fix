@@ -5,8 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test:watch": "ng test --browsers=ChromeHeadless",
-    "test": "ng test --browsers=ChromeHeadless --watch=false",
+    "test-lib:ci": "ng test ngx-autofocus-fix --no-watch --no-progress --browsers=ChromeHeadlessCI",
+    "test-lib": "ng test --browsers=ChromeHeadlessCI",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
