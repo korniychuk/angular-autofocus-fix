@@ -11,19 +11,14 @@ class TestAutofocusFixDirective extends AutofocusFixDirective {
   public localConfig!: MutablePartial<AutofocusFixConfig>;
 }
 
-@Component({
-  selector: 'no-focusable',
-  template: ``
-})
+@Component({ selector: 'no-focusable', template: `` })
 class NoFocusableComponent implements OnInit {
-  constructor(private $element: ElementRef) {}
+  public constructor(private $element: ElementRef) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     (this.$element.nativeElement as HTMLElement).focus = undefined as any;
   }
 }
-
-
 
 @Directive({ selector: '[focus-binding]', exportAs: 'focusBinding' })
 class FocusBindingDirective {
@@ -37,6 +32,22 @@ class FocusBindingDirective {
   public get isFocused(): boolean {
     return this.$el.nativeElement === this.$document.activeElement;
   }
+}
+
+@Directive({ selector: '[self-focusing]' })
+class SelfFocusingDirective implements OnInit {
+
+  public readonly element: HTMLElement;
+
+  public constructor($er: ElementRef) {
+    this.element = $er.nativeElement;
+  }
+
+  public ngOnInit(): void {
+    this.element.focus();
+    spyOn(this.element, 'focus');
+  }
+
 }
 
 @Component({
@@ -59,20 +70,26 @@ class FocusBindingDirective {
     </div>
     <div *ngIf="showFocusBinding">
       <input type="text" autofocus focus-binding>
-      {{ focusBinding?.isFocused }} <!-- for triggering ExpressionChangedAfterItHasBeenCheckedError -->
+      {{ focusBindingDir?.isFocused }} <!-- for triggering ExpressionChangedAfterItHasBeenCheckedError -->
     </div>
     <div *ngIf="showFocusBindingWithTriggerChangeDetection">
       <input type="text" autofocus autofocusFixTriggerDetectChanges focus-binding>
-      {{ focusBinding?.isFocused }} <!-- for triggering ExpressionChangedAfterItHasBeenCheckedError -->
+      {{ focusBindingDir?.isFocused }} <!-- for triggering ExpressionChangedAfterItHasBeenCheckedError -->
     </div>
     <div *ngIf="showAsync">
       <input type="text" autofocus autofocusFixAsync>
+    </div>
+    <div *ngIf="showSelfFocusing">
+      <input type="text" autofocus self-focusing>
     </div>
   `,
 })
 class TestWrapperComponent {
   @ViewChild(FocusBindingDirective, { static: false })
-  public focusBinding!: FocusBindingDirective;
+  public focusBindingDir!: FocusBindingDirective;
+
+  @ViewChild(SelfFocusingDirective, { static: false })
+  public selfFocusingDir!: SelfFocusingDirective;
 
   @ViewChild(AutofocusFixDirective, { static: false })
   public dir!: TestAutofocusFixDirective;
@@ -86,6 +103,8 @@ class TestWrapperComponent {
   public showFocusBindingWithTriggerChangeDetection = false;
 
   public showAsync = false;
+
+  public showSelfFocusing = false;
 }
 
 const configMock = (): Mutable<AutofocusFixConfig> => ({
@@ -113,10 +132,14 @@ describe('AutofocusFixDirective', () => {
       .configureTestingModule({
         imports: [CommonModule],
         declarations: [
+          // For testing
           TestWrapperComponent,
           NoFocusableComponent,
-          AutofocusFixDirective,
           FocusBindingDirective,
+          SelfFocusingDirective,
+
+          // The directive
+          AutofocusFixDirective,
         ],
         providers: [
           {
@@ -326,6 +349,24 @@ describe('AutofocusFixDirective', () => {
           // assert
           expect(comp.dir.autofocusFixSmartEmptyCheck).toBe(false);
           expect(comp.dir.localConfig.smartEmptyCheck).toBe(true);
+        });
+      });
+    });
+
+    describe('GIVEN: Triggering .focus() by others before the autofocus directive', () => {
+      describe('WHEN: Component triggers by the component on the which [autofocus] added', () => {
+        it('THEN: .focus() should not be triggered by [autofocus] directive', () => {
+          // act
+          comp.showSelfFocusing = true;
+          fixture.detectChanges();
+
+          // pre assert
+          expect(comp.selfFocusingDir).toBeTruthy();
+          const focusedEl = getFocused();
+          expect(focusedEl).toBeTruthy();
+
+          // assert
+          expect(comp.selfFocusingDir.element.focus).not.toHaveBeenCalled();
         });
       });
     });

@@ -136,7 +136,6 @@ export class AutofocusFixDirective implements OnChanges, OnInit, AfterContentIni
     }
   }
 
-  // @todo: test it
   private get amIFocused(): boolean {
     return this.$document.activeElement === this.element;
   }
