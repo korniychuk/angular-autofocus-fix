@@ -1,6 +1,9 @@
 {
-  "name": "my-app",
+  "name": "angular-autofocus-fix--workspace",
   "version": "0.0.0",
+  "engines": {
+    "node": ">=8.0.0 <13.0.0"
+  },
   "scripts": {
     "ng": "ng",
     "start": "npm run serve -- angular-8-test",
