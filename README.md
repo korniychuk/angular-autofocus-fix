@@ -1,6 +1,6 @@
 # angular-autofocus-fix
 
-Angular 2/4 directive for fix autofocus on dynamically created controls (`*ngIf`, `*ngFor`, etc.).
+Angular 2/4 directive for fix autofocus on dynamically created controls (`*ngIf`, `*ngFor`, etc.).  
 [new version for Angular 5+](https://github.com/korniychuk/angular-autofocus-fix)
 
 **Uses HTML native attribute `autofocus` as the selector!**  
