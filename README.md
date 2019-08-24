@@ -264,11 +264,6 @@ $ npm start
 $ npm run serve:prod -- angular-8-test # AoT & Prod env
 ```
 
-
-## License
-
-[MIT](http://localhost:4200) © [Anton Korniychuk](https://korniychuk.pro)
-
 ## Author
 
 | [<img src="https://www.korniychuk.pro/avatar.jpg" width="100px;"/><br /><sub>Anton Korniychuk</sub>](https://korniychuk.pro) |
