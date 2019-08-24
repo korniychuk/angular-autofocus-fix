@@ -1,9 +1,10 @@
 # angular-autofocus-fix
 
-Angular 2+ directive for fix autofocus on dinamically created controls (`*ngIf`, `*ngFor`, etc.).
+Angular 2/4 directive for fix autofocus on dynamically created controls (`*ngIf`, `*ngFor`, etc.).
+[new version for Angular 5+](https://github.com/korniychuk/angular-autofocus-fix)
 
-**Uses html native attribute `autofocus` as the selector!**  
-There are no custom selectors, no need to change your html template.
+**Uses HTML native attribute `autofocus` as the selector!**  
+There are no custom selectors, no need to change your HTML template.
 
 Works with native DOM. Doesn't use any dependencies(jQuery, etc.).
 
@@ -54,7 +55,7 @@ export class AppModule { }
 
 ## Advanced examples
 
-Ways to **disable autofocus:** any js-falsely value, except empty string
+Ways to **disable autofocus:** any js-falsely value, except the empty string
 
 ```html
    <!-- with data binding -->
