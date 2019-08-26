@@ -7,7 +7,7 @@ version: 2
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:12
+    - image: circleci/node:12-browsers
 
 jobs:
   install:
@@ -17,16 +17,16 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
+            - lib-dependencies-{{ checksum "package-lock.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - lib-dependencies-
 
       - run: npm install
 
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
 
       - persist_to_workspace:
           root: ~/repo
@@ -72,9 +72,49 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
+      - restore_cache:
+          keys:
+            - e2e-dependencies-ng5-{{ checksum "projects/angular-5-test/package-lock.json" }}
+            - e2e-dependencies-ng5-
+
+      - restore_cache:
+          keys:
+            - e2e-dependencies-ng8-{{ checksum "projects/angular-6-test/package-lock.json" }}
+            - e2e-dependencies-ng6-
+
+      - restore_cache:
+          keys:
+            - e2e-dependencies-ng7-{{ checksum "projects/angular-7-test/package-lock.json" }}
+            - e2e-dependencies-ng7-
+
+      - restore_cache:
+          keys:
+            - e2e-dependencies-ng8-{{ checksum "projects/angular-8-test/package-lock.json" }}
+            - e2e-dependencies-ng8-
+
       - run:
           name: Install E2E dependencies
           command: npm run e2e
+
+      - save_cache:
+          paths:
+            - projects/angular-5-test/node_modules
+          key: e2e-dependencies-ng5-{{ checksum "projects/angular-5-test/package-lock.json" }}
+
+      - save_cache:
+          paths:
+            - projects/angular-6-test/node_modules
+          key: e2e-dependencies-ng6-{{ checksum "projects/angular-6-test/package-lock.json" }}
+
+      - save_cache:
+          paths:
+            - projects/angular-7-test/node_modules
+          key: e2e-dependencies-ng7-{{ checksum "projects/angular-7-test/package-lock.json" }}
+
+      - save_cache:
+          paths:
+            - projects/angular-8-test/node_modules
+          key: e2e-dependencies-ng8-{{ checksum "projects/angular-8-test/package-lock.json" }}
 
       - run:
           name: Run E2E tests
