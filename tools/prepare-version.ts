@@ -14,20 +14,26 @@ process.chdir(libRoot());
 
 const localVer = getLocalVersion();
 const publicVers = getPublicVersions();
-const gitVers = getGitVersions();
 
 const isLocalVerPublished = publicVers.some(v => _compareVersion(v, localVer));
 if (isLocalVerPublished) {
   const v = incrementVersion(localVer);
-  console.log('v', v);
+  gitPush();
+  console.log('Version updated: ', _formatVersion(v));
+} else {
+  console.log('Current version is actual');
 }
 
+function gitPush() {
+  execSync(`git push --no-verify`);
+  execSync(`git push --no-verify --tags`);
+}
 
 function incrementVersion(prevVer: Version, type: keyof Version = 'patch'): Version {
   const newStrVer = execSync(`npm version ${type}`).toString().trim();
   const prevStrVer = _formatVersion(prevVer);
   execSync(`git add package.json package-lock.json`);
-  execSync(`git commit -m 'Update package version ${prevStrVer} -> ${newStrVer}'`);
+  execSync(`git commit -m 'Update package version: ${prevStrVer} -> ${newStrVer}'`);
   execSync(`git tag -a ${newStrVer} -m 'new version: ${newStrVer}'`);
 
   return _parseVersion(newStrVer);
@@ -46,15 +52,15 @@ function getPublicVersions(): Version[] {
     .filter(Boolean);
 }
 
-function getGitVersions(): Version[] {
-  const output = execSync(`git tag -l 'v*'`);
-
-  return String(output)
-    .split('\n')
-    .slice(0, -1)
-    .map((v: string) => _parseVersion(v))
-    .filter(Boolean) as Version[];
-}
+// function getGitVersions(): Version[] {
+//   const output = execSync(`git tag -l 'v*'`);
+//
+//   return String(output)
+//     .split('\n')
+//     .slice(0, -1)
+//     .map((v: string) => _parseVersion(v))
+//     .filter(Boolean) as Version[];
+// }
 
 function _parseVersion(strVersion: StrVersion): Version | undefined {
   const res = strVersion.match(/^v?(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)$/);
