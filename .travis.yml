@@ -53,11 +53,11 @@ jobs:
         - npm run test:ci
     - stage: "Build"
       name: "Making production build"
-      script: npm run build:prod
+      script: npm run build
     - stage: "E2e"
       name: "E2E Tests"
       install: npm run e2e-install
-      script: npm run e2e
+      script: npm run e2e:prod
 
 stages:
   - Tests
