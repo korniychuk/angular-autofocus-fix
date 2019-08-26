@@ -6,15 +6,16 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "npm run serve -- angular-8-test",
-    "serve": "ng serve",
+    "start": "npm run serve",
+    "serve": "ng serve angular-8-test",
     "serve:prod": "npm run serve -- --aot --prod=true",
-    "build": "ng build",
-    "test-lib:ci": "ng test ngx-autofocus-fix --no-watch --no-progress --browsers=ChromeHeadlessCI",
-    "test-lib": "ng test --browsers=ChromeHeadlessCI",
+    "build": "ng build ngx-autofocus-fix",
+    "build:prod": "ng build ngx-autofocus-fix --prod",
+    "test": "ng test ngx-autofocus-fix --browsers=ChromeHeadlessCI",
+    "test:ci": "npm run test -- --no-watch --no-progress",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "install-test-projects-deps": "cd projects/angular-8-test && npm i && cd ../angular-7-test && npm i && cd ../angular-6-test && npm i && cd ../angular-5-test && npm i"
+    "e2e-install": "cd projects/angular-8-test && npm i && cd ../angular-7-test && npm i && cd ../angular-6-test && npm i && cd ../angular-5-test && npm i"
   },
   "private": true,
   "dependencies": {

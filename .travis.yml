@@ -1,0 +1,31 @@
+dist: trusty
+sudo: false
+
+language: node_js
+node_js:
+  - "12"
+
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+
+cache:
+  directories:
+    - ./node_modules
+    - ./projects/angular-5-test/node_modules
+    - ./projects/angular-6-test/node_modules
+    - ./projects/angular-7-test/node_modules
+    - ./projects/angular-8-test/node_modules
+
+install:
+  - npm install
+
+script:
+  - npm run lint
+  - npm run test:ci
+  - npm run build:prod
+  - npm run e2e-install
+  - npm run e2e
