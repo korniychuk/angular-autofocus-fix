@@ -26,22 +26,7 @@ cache:
     - ./projects/angular-6-test/node_modules
     - ./projects/angular-7-test/node_modules
     - ./projects/angular-8-test/node_modules
-
-#install:
-#  - npm install
-#
-#before_script:
-#  - npm run lint
-#  - npm run test:ci
-#
-#script:
-#  - npm run build:prod
-#
-#after_script:
-#  - npm run e2e-install
-#  - npm run e2e
-
-#after_success:
+    - ./dist/ngx-autofocus-fix # for persistence between stages
 
 jobs:
   include:
@@ -58,6 +43,10 @@ jobs:
       name: "E2E Tests"
       install: npm run e2e-install
       script: npm run e2e:prod
+#    - stage: "Prepare Version"
+#      script:
+#    - stage: "publish"
+#      name: "Publishing the package"
 
 stages:
   - Tests
