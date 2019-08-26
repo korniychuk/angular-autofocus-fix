@@ -1,0 +1,138 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:12
+
+jobs:
+  install:
+    <<: *defaults
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+
+  lint:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+
+      - run:
+          name: Run lint
+          command: npm run lint
+
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+
+      - run:
+          name: Run tests
+          command: npm run test:ci
+
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+
+      - run:
+          name: Build package
+          command: npm run build
+
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+
+  e2e:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+
+      - run:
+          name: Install E2E dependencies
+          command: npm run e2e
+
+      - run:
+          name: Run E2E tests
+          command: npm run e2e
+
+#  deploy-dev:
+#    <<: *defaults
+#    steps:
+#      - attach_workspace:
+#          at: ~/repo
+#      - run:
+#          name: Authenticate with registry
+#          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+#      - run:
+#          name: Publish package
+#          command: npm run publish:dev
+#
+#  deploy-prod:
+#    <<: *defaults
+#    steps:
+#      - attach_workspace:
+#          at: ~/repo
+#      - run:
+#          name: Authenticate with registry
+#          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+#      - run:
+#          name: Publish package
+#          command: npm run publish:prod
+
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+#      - test:
+#          filters:
+#            tags:
+#              only: /^v.*/
+      - build:
+          requires:
+            - install
+            - lint
+            - test
+          filters:
+            branches:
+              only: /(master|develop)/
+#      - deploy-dev:
+#          requires:
+#            - test
+#            - build
+#          filters:
+#            branches:
+#              only: /develop/
+#      - deploy-prod:
+#          requires:
+#            - test
+#            - build
+#          filters:
+##            tags:
+##              only: /^v.*/
+#            branches:
+#              only: /master/
