@@ -18,16 +18,19 @@ const gitVers = getGitVersions();
 
 const isLocalVerPublished = publicVers.some(v => _compareVersion(v, localVer));
 if (isLocalVerPublished) {
-  incrementVersion();
+  const v = incrementVersion(localVer);
+  console.log('v', v);
 }
 
 
-function incrementVersion(type: keyof Version = 'patch'): void {
-  const newVer = execSync(`npm version ${type}`);
-  const tag = `v${newVer}`;
+function incrementVersion(prevVer: Version, type: keyof Version = 'patch'): Version {
+  const newStrVer = execSync(`npm version ${type}`).toString();
+  const prevStrVer = _formatVersion(prevVer);
   execSync(`git add package.json package-lock.json`);
-  execSync(`git commit -m 'CI: New version ${newVer}'`);
-  execSync(`git tag -a ${tag} -m 'new version: ${tag}'`);
+  execSync(`git commit -m 'Update package version ${prevStrVer} -> ${newStrVer}'`);
+  execSync(`git tag -a ${newStrVer} -m 'new version: ${newStrVer}'`);
+
+  return _parseVersion(newStrVer);
 }
 
 function getLocalVersion(): Version | undefined {
@@ -62,6 +65,10 @@ function _parseVersion(strVersion: StrVersion): Version | undefined {
     minor: +res.groups.minor,
     patch: +res.groups.patch,
   };
+}
+
+function _formatVersion(v: Version): StrVersion {
+  return `v${v.major}.${v.minor}.${v.patch}`;
 }
 
 function _compareVersion(a?: Version, b?: Version): boolean {
