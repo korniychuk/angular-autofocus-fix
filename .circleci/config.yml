@@ -112,6 +112,22 @@ workflows:
 #          filters:
 #            tags:
 #              only: /^v.*/
+      - install:
+          filters:
+            branches:
+              only: /master/
+      - lint:
+          - requires:
+              - install
+          filters:
+            branches:
+              only: /master/
+      - test:
+          - requires:
+              - install
+          filters:
+            branches:
+              only: /master/
       - build:
           requires:
             - install
@@ -119,7 +135,14 @@ workflows:
             - test
           filters:
             branches:
-              only: /(master|develop)/
+              only: /master/
+      - e2e:
+          requires:
+            - build
+          filters:
+            branches:
+              only: /master/
+
 #      - deploy-dev:
 #          requires:
 #            - test
