@@ -42,6 +42,7 @@ describe(`Angular ${expectedAngularMajorVersion}`, () => {
       const until = protractor.ExpectedConditions;
       for (let i = 0; i < 5; i++) {
         await browser.wait(until.presenceOf(page.getElementByE2eAttr('input-' + i)), 150, 'Element taking too long to appear in the DOM');
+        await browser.waitForAngular();
 
         expect(page.getInputsCount()).toBe(i + 1);
         const focusIndex = i - i % 2;

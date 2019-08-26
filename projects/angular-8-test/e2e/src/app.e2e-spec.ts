@@ -47,6 +47,7 @@ describe(`Angular ${expectedAngularMajorVersion}`, () => {
           environment.inputsGenerationIntervalMs + 50,
           'Element taking too long to appear in the DOM',
         );
+        await browser.waitForAngular();
 
         expect(page.getSimpleInputCount()).toBe(i + 1);
         const focusIndex = i - i % 2;
@@ -79,6 +80,7 @@ describe(`Angular ${expectedAngularMajorVersion}`, () => {
           environment.inputsGenerationIntervalMs + 50,
           'Element taking too long to appear in the DOM',
         );
+        await browser.waitForAngular();
 
         expect(page.getMaterialInputCount()).toBe(i + 1);
         const focusIndex = i - i % 2;
