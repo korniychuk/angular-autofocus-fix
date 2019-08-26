@@ -45,13 +45,21 @@ cache:
 
 jobs:
   include:
-    - stage: "Install"
-      name: "Npm Install"
-      script: npm install
-    - stage: "lint"
-      name: "TS Lint"
-      script: npm run lint
+    - stage: "tests"
+      name: "Unit Tests & Linter"
+      install: npm install
+      script:
+        - npm run lint
+        - npm run test:ci
+    - stage: "build"
+      name: "Making production build"
+      script: npm run build:prod
+    - stage: "e2e"
+      name: "E2E Tests"
+      install: npm run e2e-install
+      script: npm run e2e
 
 stages:
-  - Install
+  - test
   - lint
+  - e2e
