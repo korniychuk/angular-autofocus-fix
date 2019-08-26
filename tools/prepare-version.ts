@@ -24,7 +24,7 @@ if (isLocalVerPublished) {
 
 
 function incrementVersion(prevVer: Version, type: keyof Version = 'patch'): Version {
-  const newStrVer = execSync(`npm version ${type}`).toString();
+  const newStrVer = execSync(`npm version ${type}`).toString().trim();
   const prevStrVer = _formatVersion(prevVer);
   execSync(`git add package.json package-lock.json`);
   execSync(`git commit -m 'Update package version ${prevStrVer} -> ${newStrVer}'`);
