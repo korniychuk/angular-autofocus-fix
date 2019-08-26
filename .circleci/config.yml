@@ -74,22 +74,22 @@ jobs:
 
       - restore_cache:
           keys:
-            - e2e-dependencies-ng5-{{ checksum "projects/angular-5-test/package-lock.json" }}
+            - e2e-dependencies-ng5-{{ checksum "projects/angular-5-test/package.json" }}
             - e2e-dependencies-ng5-
 
       - restore_cache:
           keys:
-            - e2e-dependencies-ng8-{{ checksum "projects/angular-6-test/package-lock.json" }}
+            - e2e-dependencies-ng8-{{ checksum "projects/angular-6-test/package.json" }}
             - e2e-dependencies-ng6-
 
       - restore_cache:
           keys:
-            - e2e-dependencies-ng7-{{ checksum "projects/angular-7-test/package-lock.json" }}
+            - e2e-dependencies-ng7-{{ checksum "projects/angular-7-test/package.json" }}
             - e2e-dependencies-ng7-
 
       - restore_cache:
           keys:
-            - e2e-dependencies-ng8-{{ checksum "projects/angular-8-test/package-lock.json" }}
+            - e2e-dependencies-ng8-{{ checksum "projects/angular-8-test/package.json" }}
             - e2e-dependencies-ng8-
 
       - run:
@@ -99,22 +99,22 @@ jobs:
       - save_cache:
           paths:
             - projects/angular-5-test/node_modules
-          key: e2e-dependencies-ng5-{{ checksum "projects/angular-5-test/package-lock.json" }}
+          key: e2e-dependencies-ng5-{{ checksum "projects/angular-5-test/package.json" }}
 
       - save_cache:
           paths:
             - projects/angular-6-test/node_modules
-          key: e2e-dependencies-ng6-{{ checksum "projects/angular-6-test/package-lock.json" }}
+          key: e2e-dependencies-ng6-{{ checksum "projects/angular-6-test/package.json" }}
 
       - save_cache:
           paths:
             - projects/angular-7-test/node_modules
-          key: e2e-dependencies-ng7-{{ checksum "projects/angular-7-test/package-lock.json" }}
+          key: e2e-dependencies-ng7-{{ checksum "projects/angular-7-test/package.json" }}
 
       - save_cache:
           paths:
             - projects/angular-8-test/node_modules
-          key: e2e-dependencies-ng8-{{ checksum "projects/angular-8-test/package-lock.json" }}
+          key: e2e-dependencies-ng8-{{ checksum "projects/angular-8-test/package.json" }}
 
       - run:
           name: Run E2E tests
