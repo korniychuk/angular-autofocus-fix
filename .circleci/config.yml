@@ -117,13 +117,13 @@ workflows:
             branches:
               only: /master/
       - lint:
-          - requires:
+          requires:
               - install
           filters:
             branches:
               only: /master/
       - test:
-          - requires:
+          requires:
               - install
           filters:
             branches:
