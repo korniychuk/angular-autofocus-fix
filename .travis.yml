@@ -5,6 +5,13 @@ language: node_js
 node_js:
   - "12"
 
+git:
+  depth: 1
+
+branches:
+  only:
+    - master
+
 addons:
   apt:
     sources:
@@ -20,12 +27,31 @@ cache:
     - ./projects/angular-7-test/node_modules
     - ./projects/angular-8-test/node_modules
 
-install:
-  - npm install
+#install:
+#  - npm install
+#
+#before_script:
+#  - npm run lint
+#  - npm run test:ci
+#
+#script:
+#  - npm run build:prod
+#
+#after_script:
+#  - npm run e2e-install
+#  - npm run e2e
 
-script:
-  - npm run lint
-  - npm run test:ci
-  - npm run build:prod
-  - npm run e2e-install
-  - npm run e2e
+#after_success:
+
+jobs:
+  include:
+    - stage: "Install"
+      name: "Npm Install"
+      script: npm install
+    - stage: "lint"
+      name: "TS Lint"
+      script: npm run lint
+
+stages:
+  - Install
+  - lint
