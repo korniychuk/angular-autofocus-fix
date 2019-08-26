@@ -2,6 +2,9 @@
   <h1>Welcome to {{ title }}!</h1>
 </div>
 <hr>
+<button (click)="showInput = !showInput">Toggle</button>
+<input type="text" *ngIf="showInput" autofocus>
+<hr>
 <h3>Default inputs:</h3>
 <button e2e-attr="run" (click)="run()">Run</button>
 <div class="inputs">

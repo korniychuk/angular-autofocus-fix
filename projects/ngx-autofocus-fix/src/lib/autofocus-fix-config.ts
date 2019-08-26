@@ -24,8 +24,12 @@ export class AutofocusFixConfig {
   public readonly smartEmptyCheck: boolean = false;
   /**
    * In case `true`: trigger {@link ChangeDetectorRef.detectChanges}() after {@link HTMLElement.focus}().
-   * This is helpful when to the same HTMLElement besides this directive, there are others, that have
-   * some binding for the focus event. In this case
+   *
+   * This is helpful in the case when the HTMLElement to which {@link AutofocusFixDirective} added
+   * wrapped by another directive/component that has some binding related to focus of the element.
+   * In this case without enabling .triggerChangeDetection option Angular throws ExpressionChangedAfterItHasBeenCheckedError.
+   *
+   * A striking example is the <mat-form-field> from the Angular Material that wraps <input> control.
    */
   public readonly triggerDetectChanges: boolean = false;
 }

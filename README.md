@@ -12,15 +12,17 @@ Angular 5+ directive for fix autofocus on dynamically created controls (`*ngIf`,
 * **Uses native HTML attribute `autofocus` as the selector!** [example](#quick-start)
 * There are no custom selectors, no need to change your HTML template.
 * Works with native DOM. Doesn't use any dependencies(jQuery, lodash, etc.).
+* [Configurable](#configuration). Use can use input attributes or provide global options via `AutofocusFixConfig`
 * 100% Coverage, over 60 unit tests.
 * E2E tests for 8,7,6 and 5 versions of Angular including e2e test for Angular Material Input.
 * The library understands an extensive list of input data. (`null/NaN/'true'/[]/...`). See [Advanced examples](#advanced-examples)
-* Supports asynchronous focusing (Useful for infinite scroll).
+* Supports asynchronous focusing(optionally wrapping `.focus()` execution with `setTimeout()`).
 * Works perfectly with Angular Material. (there is an E2E test)
 * Works with AOT mode. (tested via E2E test)
-* [Configurable](#configuration). Use can use input attributes or provide global options via `AutofocusFixConfig`
 
 ## Installation
+
+Notice: npm package renamed `angular-autofocus-fix` -> `ngx-autofocus-fix`
 
 To install this library, run:
 
@@ -51,7 +53,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
 
-    AutofocusFixModule, // <--- new code
+    AutofocusFixModule.forRoot(), // <--- new code
   ],
   providers: [],
   bootstrap: [ AppComponent ]
@@ -130,7 +132,40 @@ See [Configuration](#configuration) to understand how to enable the mode.
 
 ## Configuration
 
-There are four ways to configure the `AutofocusFixDirective`:
+### Options
+
+```typescript
+export class AutofocusFixConfig {
+  ...
+
+  /**
+   * In case `true` .focus() events will be wrapped by `setTimeout(() => ...)`.
+   *
+   * Notice:
+   * I'm not sure that the action is a good practice, however this ability added because of next issues:
+   * - https://github.com/korniychuk/angular-autofocus-fix/issues/1
+   * - https://github.com/spirosikmd/angular2-focus/issues/46
+   */
+  public readonly async: boolean = false;
+  /**
+   * In case `true`: treat an empty string, an empty array and an empty object as a falsy value.
+   * In case `false`(default): each of these values treats as truthy.
+   */
+  public readonly smartEmptyCheck: boolean = false;
+  /**
+   * In case `true`: trigger {@link ChangeDetectorRef.detectChanges}() after {@link HTMLElement.focus}().
+   *
+   * This is helpful in the case when the HTMLElement to which {@link AutofocusFixDirective} added
+   * wrapped by another directive/component that has some binding related to focus of the element.
+   * In this case without enabling .triggerChangeDetection option Angular throws ExpressionChangedAfterItHasBeenCheckedError.
+   *
+   * A striking example is the <mat-form-field> from the Angular Material that wraps <input> control.
+   */
+  public readonly triggerDetectChanges: boolean = false;
+}
+```
+
+### There are four ways to configure the `AutofocusFixDirective`:
 
 **1. Specify attribute-options for specific HTML Element**
    ```html

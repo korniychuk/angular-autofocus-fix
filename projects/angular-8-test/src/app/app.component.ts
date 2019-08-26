@@ -19,6 +19,7 @@ import { environment } from '../environments';
 })
 export class AppComponent implements OnInit {
   public title = 'angular-*-test';
+  public showInput = false;
   public numbers$!: Observable<number[]>;
 
   private run$ = new Subject<void>();

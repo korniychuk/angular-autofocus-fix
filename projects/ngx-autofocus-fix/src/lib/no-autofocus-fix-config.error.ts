@@ -25,10 +25,10 @@ export function noAutofocusFixConfigError() {
       ...
       providers: [
         ...
-        {                                          // <--- new code
-          provide: ${ configName }                 // <---
+        {                                               // <--- new code
+          provide: ${ configName }                   // <---
           useValue: new ${configName}({ ... }),    // <---
-        },                                         // <---
+        },                                              // <---
       ],
       ...
     })

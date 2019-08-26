@@ -15,7 +15,7 @@ import { MaterialTestModule } from './material-test/material-test.module';
     BrowserModule,
     CommonModule,
 
-    AutofocusFixModule.forRoot(),
+    AutofocusFixModule.forRoot({ smartEmptyCheck: true }),
 
     MaterialTestModule,
   ],
