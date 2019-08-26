@@ -43,8 +43,9 @@ jobs:
       name: "E2E Tests"
       install: npm run e2e-install
       script: npm run e2e:prod
-#    - stage: "Prepare Version"
-#      script:
+    - stage: "Version"
+      name: "Prepare Version"
+      script: npm run prepare-ver
 #    - stage: "publish"
 #      name: "Publishing the package"
 
@@ -52,3 +53,4 @@ stages:
   - Tests
   - Build
   - E2e
+  - Version
