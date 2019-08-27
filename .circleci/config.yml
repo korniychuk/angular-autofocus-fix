@@ -53,7 +53,7 @@ jobs:
           command: npm run test:ci
 
       - store_artifacts:
-          path: ./coverage
+          path: ./coverage/ngx-autofocus-fix
           destination: coverage
 
       - run:
@@ -160,29 +160,19 @@ jobs:
           name: Prepare package version
           command: npm run prepare-ver
 
-#  deploy-dev:
-#    <<: *defaults
-#    steps:
-#      - attach_workspace:
-#          at: ~/repo
-#      - run:
-#          name: Authenticate with registry
-#          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
-#      - run:
-#          name: Publish package
-#          command: npm run publish:dev
-#
-#  deploy-prod:
-#    <<: *defaults
-#    steps:
-#      - attach_workspace:
-#          at: ~/repo
-#      - run:
-#          name: Authenticate with registry
-#          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
-#      - run:
-#          name: Publish package
-#          command: npm run publish:prod
+  publish:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+
+      - run:
+          name: Publish package
+          command: npm run publish
 
 workflows:
   version: 2
@@ -193,12 +183,12 @@ workflows:
             branches:
               only: /master/
 
-#      - lint:
-#          requires:
-#              - install
-#          filters:
-#            branches:
-#              only: /master/
+      - lint:
+          requires:
+              - install
+          filters:
+            branches:
+              only: /master/
 
       - test:
           requires:
@@ -207,51 +197,38 @@ workflows:
             branches:
               only: /master/
 
-#      - build:
-#          requires:
-#            - install
-#            - lint
-#            - test
-#          filters:
-#            branches:
-#              only: /master/
-#
-#      - e2e-install:
-#          requires:
-#            - build
-#          filters:
-#            branches:
-#              only: /master/
-#
-#      - e2e:
-#          requires:
-#            - e2e-install
-#          filters:
-#            branches:
-#              only: /master/
-
-      - prepare-ver:
+      - build:
           requires:
-            - install
+            - lint
             - test
-#            - e2e
           filters:
             branches:
               only: /master/
 
-#      - deploy-dev:
-#          requires:
-#            - test
-#            - build
-#          filters:
-#            branches:
-#              only: /develop/
-#      - deploy-prod:
-#          requires:
-#            - test
-#            - build
-#          filters:
-##            tags:
-##              only: /^v.*/
-#            branches:
-#              only: /master/
+      - e2e-install:
+          requires:
+            - build
+          filters:
+            branches:
+              only: /master/
+
+      - e2e:
+          requires:
+            - e2e-install
+          filters:
+            branches:
+              only: /master/
+
+      - prepare-ver:
+          requires:
+            - e2e
+          filters:
+            branches:
+              only: /master/
+
+      - publish:
+          requires:
+            - e2e
+          filters:
+            branches:
+              only: /master/
