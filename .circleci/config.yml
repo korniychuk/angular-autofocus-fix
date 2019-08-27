@@ -66,7 +66,7 @@ jobs:
           root: ~/repo
           paths: .
 
-  e2e:
+  e2e-install:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -97,39 +97,34 @@ jobs:
           command: npm run e2e-install
 
       - save_cache:
-          - paths:
-              - projects/angular-5-test/node_modules
-            key: e2e-dependencies-ng5-{{ checksum "projects/angular-5-test/package.json" }}
-          - paths:
-              - projects/angular-6-test/node_modules
-            key: e2e-dependencies-ng6-{{ checksum "projects/angular-6-test/package.json" }}
-          - paths:
-              - projects/angular-7-test/node_modules
-            key: e2e-dependencies-ng7-{{ checksum "projects/angular-7-test/package.json" }}
+          paths:
+            - projects/angular-5-test/node_modules
+          key: e2e-dependencies-ng5-{{ checksum "projects/angular-5-test/package.json" }}
 
-          - paths:
-              - projects/angular-8-test/node_modules
-            key: e2e-dependencies-ng8-{{ checksum "projects/angular-8-test/package.json" }}
+      - save_cache:
+          paths:
+            - projects/angular-6-test/node_modules
+          key: e2e-dependencies-ng6-{{ checksum "projects/angular-6-test/package.json" }}
 
-#      - save_cache:
-#          paths:
-#            - projects/angular-5-test/node_modules
-#          key: e2e-dependencies-ng5-{{ checksum "projects/angular-5-test/package.json" }}
-#
-#      - save_cache:
-#          paths:
-#            - projects/angular-6-test/node_modules
-#          key: e2e-dependencies-ng6-{{ checksum "projects/angular-6-test/package.json" }}
-#
-#      - save_cache:
-#          paths:
-#            - projects/angular-7-test/node_modules
-#          key: e2e-dependencies-ng7-{{ checksum "projects/angular-7-test/package.json" }}
-#
-#      - save_cache:
-#          paths:
-#            - projects/angular-8-test/node_modules
-#          key: e2e-dependencies-ng8-{{ checksum "projects/angular-8-test/package.json" }}
+      - save_cache:
+          paths:
+            - projects/angular-7-test/node_modules
+          key: e2e-dependencies-ng7-{{ checksum "projects/angular-7-test/package.json" }}
+
+      - save_cache:
+          paths:
+            - projects/angular-8-test/node_modules
+          key: e2e-dependencies-ng8-{{ checksum "projects/angular-8-test/package.json" }}
+
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+
+  e2e:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
 
       - run:
           name: Run E2E tests
@@ -191,9 +186,17 @@ workflows:
           filters:
             branches:
               only: /master/
-      - e2e:
+
+      - e2e-install:
           requires:
             - build
+          filters:
+            branches:
+              only: /master/
+
+      - e2e:
+          requires:
+            - e2e-install
           filters:
             branches:
               only: /master/
