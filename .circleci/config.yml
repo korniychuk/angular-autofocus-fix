@@ -142,10 +142,12 @@ jobs:
             git config --global user.email "dev@korniychuk.pro"
             git config --global user.name "Circle CI"
 
-      - run:
-          name: Add Github.com Keys to known_hosts
-          command: |
-            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+      - add_ssh_keys
+
+#      - run:
+#          name: Add Github.com Keys to known_hosts
+#          command: |
+#            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
       #            mkdir -p ~/.ssh
       - run:
