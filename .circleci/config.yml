@@ -136,8 +136,11 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
-      - run: git config --global user.email "dev@korniychuk.pro"
-      - run: git config --global user.name "Circle CI"
+      - run:
+          name: Git & SSH Configuring
+          command: |
+            git config --global user.email "dev@korniychuk.pro"
+            git config --global user.name "Circle CI"
 
       - run:
           name: Prepare package version

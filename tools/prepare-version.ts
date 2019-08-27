@@ -24,8 +24,8 @@ if (isLocalVerPublished) {
 }
 
 function gitPush() {
-  run(`git push --no-verify`);
-  run(`git push --no-verify --tags`);
+  run(`git push --no-verify --follow-tags`);
+  // run(`git push --no-verify --tags`);
 }
 
 function incrementVersion(prevVer: Version, type: keyof Version = 'patch'): Version {
