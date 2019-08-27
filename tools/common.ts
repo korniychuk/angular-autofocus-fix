@@ -6,6 +6,6 @@ export const root = path.join.bind(path, __dirname, '..');
 export const libRoot = root.bind(path, 'projects', libName);
 
 export function run(command: string): Buffer {
-  console.log(`> ${command}`);
+  console.log(`$> ${command}`);
   return execSync(command);
 }
