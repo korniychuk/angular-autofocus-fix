@@ -171,10 +171,11 @@ workflows:
   version: 2
   test-deploy:
     jobs:
-#      - install:
-#          filters:
-#            branches:
-#              only: /master/
+      - install:
+          filters:
+            branches:
+              only: /master/
+
 #      - lint:
 #          requires:
 #              - install
@@ -212,6 +213,7 @@ workflows:
 
       - prepare-ver:
           requires:
+            - install
 #            - build
 #            - e2e
           filters:
