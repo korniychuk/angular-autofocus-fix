@@ -133,10 +133,8 @@ jobs:
   prepare-ver:
     <<: *defaults
     steps:
-#      - attach_workspace:
-#          at: ~/repo
-
-      - checkout
+      - attach_workspace:
+          at: ~/repo
 
       - run:
           name: Set Git identity
@@ -184,10 +182,10 @@ workflows:
   version: 2
   test-deploy:
     jobs:
-#      - install:
-#          filters:
-#            branches:
-#              only: /master/
+      - install:
+          filters:
+            branches:
+              only: /master/
 
 #      - lint:
 #          requires:
@@ -226,6 +224,7 @@ workflows:
 
       - prepare-ver:
           requires:
+            - install
 #            - build
 #            - e2e
           filters:
