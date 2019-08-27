@@ -1,5 +1,4 @@
-import { execSync } from 'child_process';
-import { libRoot } from './common';
+import { libRoot, run } from './common';
 
 /** @example v1.0.12 */
 type StrVersion = string;
@@ -25,16 +24,16 @@ if (isLocalVerPublished) {
 }
 
 function gitPush() {
-  execSync(`git push --no-verify`);
-  execSync(`git push --no-verify --tags`);
+  run(`git push --no-verify`);
+  run(`git push --no-verify --tags`);
 }
 
 function incrementVersion(prevVer: Version, type: keyof Version = 'patch'): Version {
-  const newStrVer = execSync(`npm version ${type}`).toString().trim();
+  const newStrVer = run(`npm version ${type}`).toString().trim();
   const prevStrVer = _formatVersion(prevVer);
-  execSync(`git add package.json package-lock.json`);
-  execSync(`git commit -m 'Update package version: ${prevStrVer} -> ${newStrVer}'`);
-  execSync(`git tag -a ${newStrVer} -m 'new version: ${newStrVer}'`);
+  run(`git add package.json package-lock.json`);
+  run(`git commit -m 'Update package version: ${prevStrVer} -> ${newStrVer}'`);
+  run(`git tag -a ${newStrVer} -m 'new version: ${newStrVer}'`);
 
   return _parseVersion(newStrVer);
 }
@@ -44,7 +43,7 @@ function getLocalVersion(): Version | undefined {
 }
 
 function getPublicVersions(): Version[] {
-  const output = execSync('npm view . versions --json');
+  const output = run('npm view . versions --json');
   const allVersions = JSON.parse(output.toString());
 
   return allVersions
@@ -53,7 +52,7 @@ function getPublicVersions(): Version[] {
 }
 
 // function getGitVersions(): Version[] {
-//   const output = execSync(`git tag -l 'v*'`);
+//   const output = run(`git tag -l 'v*'`);
 //
 //   return String(output)
 //     .split('\n')
