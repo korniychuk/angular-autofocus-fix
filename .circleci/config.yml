@@ -52,6 +52,14 @@ jobs:
           name: Run tests
           command: npm run test:ci
 
+      - store_artifacts:
+          path: ./coverage
+          destination: coverage
+
+      - run:
+          name: Publish coverage to Coveralls
+          command: npm run coveralls
+
   build:
     <<: *defaults
     steps:
@@ -191,12 +199,14 @@ workflows:
 #          filters:
 #            branches:
 #              only: /master/
-#      - test:
-#          requires:
-#              - install
-#          filters:
-#            branches:
-#              only: /master/
+
+      - test:
+          requires:
+              - install
+          filters:
+            branches:
+              only: /master/
+
 #      - build:
 #          requires:
 #            - install
@@ -223,7 +233,7 @@ workflows:
       - prepare-ver:
           requires:
             - install
-#            - build
+            - test
 #            - e2e
           filters:
             branches:

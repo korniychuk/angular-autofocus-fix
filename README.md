@@ -1,5 +1,13 @@
 # ngx-autofocus-fix
 
+<!-- BADGES -->
+[![CircleCI](https://img.shields.io/circleci/build/github/korniychuk/angular-autofocus-fix?token=none)](https://circleci.com/gh/korniychuk/angular-autofocus-fix/tree/master)
+[![Coverage Status](https://coveralls.io/repos/korniychuk/angular-autofocus-fix/badge.svg?branch=master)](https://coveralls.io/r/korniychuk/angular-autofocus-fix?branch=master)
+[![npm version](https://img.shields.io/npm/v/ngx-autofocus-fix)](https://www.npmjs.com/package/ngx-autofocus-fix)
+![npm downloads](https://img.shields.io/npm/dw/ngx-autofocus-fix)
+[![Known Vulnerabilities](https://snyk.io/test/github/korniychuk/angular-autofocus-fix/badge.svg)](https://snyk.io/test/github/korniychuk/angular-autofocus-fix)
+<!-- /BADGES -->
+
 Angular 5+ directive for fix autofocus on dynamically created controls (`*ngIf`, `*ngFor`, etc.).  
 [legacy version for Angular 2/4](https://github.com/korniychuk/angular-autofocus-fix/tree/legacy-version)
 
