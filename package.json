@@ -18,7 +18,7 @@
     "e2e:prod": "npm run e2e -- --prod=true",
     "e2e-install": "cd projects/angular-8-test && npm i && cd ../angular-7-test && npm i && cd ../angular-6-test && npm i && cd ../angular-5-test && npm i",
     "prepare-ver": "ts-node -P ./tools/tsconfig.json ./tools/prepare-version.ts",
-    "publish": "cd dist/ngx-autofocus-fix && npm publish && cd ../.."
+    "publish": "npm publish dist/ngx-autofocus-fix"
   },
   "private": true,
   "dependencies": {
