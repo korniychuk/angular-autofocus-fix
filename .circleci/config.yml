@@ -133,8 +133,10 @@ jobs:
   prepare-ver:
     <<: *defaults
     steps:
-      - attach_workspace:
-          at: ~/repo
+#      - attach_workspace:
+#          at: ~/repo
+
+      - checkout
 
       - run:
           name: Set Git identity
@@ -144,10 +146,10 @@ jobs:
 
       - add_ssh_keys
 
-#      - run:
-#          name: Add Github.com Keys to known_hosts
-#          command: |
-#            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+      - run:
+          name: Add Github.com Keys to known_hosts
+          command: |
+            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
       #            mkdir -p ~/.ssh
       - run:
@@ -182,10 +184,10 @@ workflows:
   version: 2
   test-deploy:
     jobs:
-      - install:
-          filters:
-            branches:
-              only: /master/
+#      - install:
+#          filters:
+#            branches:
+#              only: /master/
 
 #      - lint:
 #          requires:
@@ -224,7 +226,6 @@ workflows:
 
       - prepare-ver:
           requires:
-            - install
 #            - build
 #            - e2e
           filters:
