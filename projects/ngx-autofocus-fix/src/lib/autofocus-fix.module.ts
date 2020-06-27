@@ -23,7 +23,7 @@ export class AutofocusFixModule {
     }
   }
 
-  public static forRoot(options: AutofocusFixOptions = {}): ModuleWithProviders {
+  public static forRoot(options: AutofocusFixOptions = {}): ModuleWithProviders<AutofocusFixModule> {
 
     return {
       ngModule: AutofocusFixModule,
